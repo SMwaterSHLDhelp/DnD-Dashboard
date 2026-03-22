@@ -1,28 +1,11 @@
 class Session {
-  constructor(id, campaignId, date, title, description, createdAt, updatedAt) {
+  constructor(id, campaignId, name, date, notes, events) {
     this.id = id;
     this.campaignId = campaignId;
+    this.name = name;
     this.date = date;
-    this.title = title;
-    this.description = description;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.npcs = [];
-    this.characters = [];
-    this.notes = [];
-    this.events = [];
-  }
-
-  addNPC(npc) {
-    this.npcs.push(npc);
-  }
-
-  addCharacter(character) {
-    this.characters.push(character);
-  }
-
-  addNote(note) {
-    this.notes.push(note);
+    this.notes = notes;
+    this.events = events || [];
   }
 
   addEvent(event) {
