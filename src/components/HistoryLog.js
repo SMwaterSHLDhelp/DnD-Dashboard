@@ -9,7 +9,10 @@ const HistoryLog = ({ events, onAddEvent, onDeleteEvent }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewEvent((prev) => ({ ...prev, [name]: value }));
+    setNewEvent((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = (e) => {
