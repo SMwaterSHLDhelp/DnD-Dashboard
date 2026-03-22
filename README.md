@@ -1,6 +1,6 @@
 # D&D Campaign Manager
 
-A React application for managing D&D campaigns, sessions, and world building.
+A web-based tool for managing D&D campaigns, sessions, and character tracking.
 
 ## Features
 
@@ -15,77 +15,42 @@ A React application for managing D&D campaigns, sessions, and world building.
 - Timeline / History Log
 - Random Generators
 
-## Development
+## Getting Started
 
-This project was bootstrapped with Create React App.
+This project is built with React and uses npm for package management.
 
-### Available Scripts
+### Prerequisites
 
-In the project directory, you can run:
+- Node.js (v14 or higher)
+- npm (v6 or higher)
 
-#### `npm start`
+### Installation
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.
-
-#### `npm test`
-
-Launches the test runner in the interactive watch mode.
-
-#### `npm run build`
-
-Builds the app for production to the `build` folder.
-
-#### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-### Proxy Configuration
-
-For local development, API requests are proxied to `http://localhost:8080`.
-
-### Folder Structure
-
-```
-src/
-├── components/
-│   ├── Campaign/
-│   ├── Session/
-│   ├── NPC/
-│   ├── Player/
-│   ├── Combat/
-│   ├── Loot/
-│   ├── Rules/
-│   └── Shared/
-├── services/
-├── assets/
-│   ├── images/
-│   └── styles/
-└── App.js
-    └── App.css
+```bash
+npm install
 ```
 
-### Testing
+### Development
 
-This project uses React Testing Library for component testing.
+```bash
+npm start
+```
 
-### Deployment
+### Building
 
-This project can be deployed to any static hosting service that supports serving files from a subdirectory.
+```bash
+npm run build
+```
 
-### Contributing
+## Project Structure
 
-1. Fork it
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Create a new Pull Request
+- `src/` - Source code
+- `public/` - Static assets
 
-### License
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
