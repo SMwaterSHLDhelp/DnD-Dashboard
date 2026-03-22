@@ -55,6 +55,7 @@ const CharacterForm = ({ onSubmit, initialData = null }) => {
           name="class"
           value={formData.class}
           onChange={handleChange}
+          required
         />
       </div>
 
@@ -66,6 +67,7 @@ const CharacterForm = ({ onSubmit, initialData = null }) => {
           name="race"
           value={formData.race}
           onChange={handleChange}
+          required
         />
       </div>
 
@@ -78,6 +80,7 @@ const CharacterForm = ({ onSubmit, initialData = null }) => {
           value={formData.level}
           onChange={handleChange}
           min="1"
+          required
         />
       </div>
 

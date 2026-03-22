@@ -40,6 +40,7 @@ const NPCForm = ({ onSubmit, initialData = null }) => {
           name="description"
           value={formData.description}
           onChange={handleChange}
+          required
         />
       </div>
 
