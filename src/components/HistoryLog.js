@@ -26,8 +26,8 @@ const HistoryLog = ({ events, onAddEvent, onDeleteEvent }) => {
 
   return (
     <div className="history-log">
-      <h2>History Log</h2>
-      
+      <h2>Timeline / History Log</h2>
+
       <form onSubmit={handleSubmit} className="event-form">
         <div>
           <label htmlFor="date">Date:</label>
@@ -40,7 +40,7 @@ const HistoryLog = ({ events, onAddEvent, onDeleteEvent }) => {
             required
           />
         </div>
-        
+
         <div>
           <label htmlFor="description">Description:</label>
           <textarea
@@ -51,7 +51,7 @@ const HistoryLog = ({ events, onAddEvent, onDeleteEvent }) => {
             required
           />
         </div>
-        
+
         <div>
           <label htmlFor="type">Type:</label>
           <select
@@ -66,7 +66,7 @@ const HistoryLog = ({ events, onAddEvent, onDeleteEvent }) => {
             <option value="milestone">Milestone</option>
           </select>
         </div>
-        
+
         <button type="submit">Add Event</button>
       </form>
 
