@@ -10,6 +10,7 @@ class Session {
     this.npcs = [];
     this.characters = [];
     this.notes = [];
+    this.events = [];
   }
 
   addNPC(npc) {
@@ -22,6 +23,10 @@ class Session {
 
   addNote(note) {
     this.notes.push(note);
+  }
+
+  addEvent(event) {
+    this.events.push(event);
   }
 }
 

@@ -10,6 +10,7 @@ class Campaign {
     this.factions = [];
     this.history = [];
     this.maps = [];
+    this.sessions = [];
   }
 
   addWorldLore(lore) {
@@ -30,6 +31,10 @@ class Campaign {
 
   addMap(map) {
     this.maps.push(map);
+  }
+
+  addSession(session) {
+    this.sessions.push(session);
   }
 }
 
