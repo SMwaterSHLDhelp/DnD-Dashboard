@@ -1,6 +1,6 @@
 # D&D Character Manager
 
-A comprehensive dashboard for managing D&D campaigns, characters, sessions, and NPCs.
+A web application for managing Dungeons & Dragons campaigns, characters, and NPCs.
 
 ## Features
 
@@ -28,20 +28,6 @@ A comprehensive dashboard for managing D&D campaigns, characters, sessions, and 
   - Track all changes and events
   - Maintain audit trail of modifications
 
-## Project Status
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Campaign Management | ✅ | Basic CRUD operations implemented |
-| Character Management | ✅ | Basic CRUD operations implemented |
-| NPC Management | ✅ | Basic CRUD operations implemented |
-| Session Management | ✅ | Basic CRUD operations implemented |
-| Session Planning | ⚠️ | Partially implemented, needs refinement |
-| History Log | ⚠️ | Basic functionality, needs enhancement |
-| Data Persistence | ❌ | Not implemented yet |
-| User Authentication | ❌ | Not implemented yet |
-| Export/Import | ❌ | Not implemented yet |
-
 ## Project Structure
 
 ```
@@ -63,31 +49,18 @@ src/
 └── App.js
 ```
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start the development server with `npm start`
 
-- `npm start` - Runs the app in development mode
-- `npm test` - Launches the test runner
-- `npm run build` - Builds the app for production
-- `npm run eject` - Ejects the app from Create React App
+## Technologies Used
 
-## Development Status
+- React
+- JavaScript
+- CSS
 
-The project is currently in active development with:
-- Basic React structure in place
-- Component scaffolding completed
-- Data models defined
-- Development environment configured
+## License
 
-## Next Steps
-
-1. Implement data persistence layer
-2. Complete session planning functionality
-3. Add history logging enhancements
-4. Implement user authentication
-5. Add export/import capabilities
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+This project is licensed under the MIT License.
