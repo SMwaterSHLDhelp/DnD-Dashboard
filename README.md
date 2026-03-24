@@ -1,65 +1,127 @@
 # D&D Character Manager
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based web application for managing Dungeons & Dragons campaigns, sessions, characters, and NPCs.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This project provides tools for dungeon masters and players to track campaigns, sessions, player characters, and non-player characters (NPCs). It features a clean, responsive interface built with React and is designed to be easily extensible for future D&D tools.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Implemented Features
+- **Timeline/History Log** - Track campaign events and session history
+- **NPC Tracker** - Create, edit, and manage NPCs with stats, combat info, and session history
+- **Player & Character Tracking** - Create and manage player characters with full D&D stats
+- **Campaign Management** - Create and manage campaigns
+- **Session Management** - Track sessions with date, location, participants, and notes
+- **Session Planner** - Prepare sessions with encounters, NPCs, and plot points
 
-The page will reload when you make changes. You may also see any lint errors in the console.
+### Planned Features
+- Combat & Encounter Tools
+- Loot & Inventory Management
+- Rules Reference
+- Notes & Secrets
+- Random Generators
 
-### `npm test`
+## Project Status
 
-Launches the test runner in the interactive watch mode. See [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Feature | Status | Priority |
+|---------|--------|----------|
+| Campaign & World Building | Todo | High |
+| Session Management | Todo | High |
+| NPC Tracker | Done (UI) | Medium |
+| Player & Character Tracking | Done (UI) | Medium |
+| Combat & Encounter Tools | Backlog | Medium |
+| Loot & Inventory | Backlog | Low |
+| Rules Reference | Backlog | Low |
+| Notes & Secrets | Backlog | Low |
+| Timeline/History Log | Done | Medium |
+| Random Generators | Backlog | Low |
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend Framework**: React 18.3.1
+- **Styling**: CSS (custom)
+- **Build Tool**: Create React App (react-scripts)
+- **State Management**: Local component state (planned: Context API or Redux for complex state)
 
-The build is minified and the filenames include the hashes. Your app is ready to be deployed!
+## Getting Started
 
-See [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clone the repository
+2. Navigate to the project directory
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Start the development server:
+   ```bash
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Project Structure
 
-## Learn More
+```
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── CampaignForm.js
+│   │   ├── CampaignList.js
+│   │   ├── CharacterForm.js
+│   │   ├── CharacterList.js
+│   │   ├── HistoryLog.js
+│   │   ├── NPCForm.js
+│   │   ├── NPCList.js
+│   │   ├── SessionForm.js
+│   │   ├── SessionList.js
+│   │   └── SessionPlanner.js
+│   ├── models/
+│   │   ├── Campaign.js
+│   │   └── Session.js
+│   ├── App.js
+│   ├── index.js
+│   └── index.css
+├── docs/
+│   ├── DEVELOPMENT_TASKS.md
+│   ├── MISSING_FILES_FIX.md
+│   └── PROJECT_STATUS.md
+├── package.json
+├── README.md
+└── LICENSE
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Development
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Running Tests
 
-### Code Splitting
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Building for Production
 
-### Analyzing the Bundle Size
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
+This is an active development project. Future contributions are welcome via pull requests.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Acknowledgments
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Built with [React](https://reactjs.org/)
+- Designed for D&D 5e but can be adapted for other systems
