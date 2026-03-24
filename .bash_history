@@ -37,3 +37,9 @@ ls
 npm run dev
 npm run start
 npm run dev
+npm run dev
+npm run 
+npm run start
+npm run dev
+npm run start
+ls

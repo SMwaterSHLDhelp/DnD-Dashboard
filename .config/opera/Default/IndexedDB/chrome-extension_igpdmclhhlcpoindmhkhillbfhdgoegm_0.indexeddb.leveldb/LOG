@@ -1,13 +1,14 @@
-2026/03/23-23:19:33.892 e0f85 Reusing MANIFEST /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/IndexedDB/chrome-extension_igpdmclhhlcpoindmhkhillbfhdgoegm_0.indexeddb.leveldb/MANIFEST-000001
-2026/03/23-23:19:33.892 e0f85 Recovering log #7
-2026/03/23-23:19:33.892 e0f85 Reusing old log /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/IndexedDB/chrome-extension_igpdmclhhlcpoindmhkhillbfhdgoegm_0.indexeddb.leveldb/000007.log 
-2026/03/23-23:19:33.901 e0f91 Level-0 table #11: started
-2026/03/23-23:19:33.902 e0f91 Level-0 table #11: 1314 bytes OK
-2026/03/23-23:19:33.905 e0f91 Delete type=0 #7
-2026/03/23-23:19:33.905 e0f91 Manual compaction at level-0 from '\x00\x06\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at '\x00\x06\x00\x00\x05' @ 357 : 1
-2026/03/23-23:19:33.905 e0f91 Compacting 1@0 + 1@1 files
-2026/03/23-23:19:33.908 e0f91 Generated table #12@0: 136 keys, 4930 bytes
-2026/03/23-23:19:33.908 e0f91 Compacted 1@0 + 1@1 files => 4930 bytes
-2026/03/23-23:19:33.910 e0f91 compacted to: files[ 0 1 1 0 0 0 0 ]
-2026/03/23-23:19:33.910 e0f91 Delete type=2 #11
-2026/03/23-23:19:33.911 e0f95 Manual compaction at level-0 from '\x00\x06\x00\x00\x05' @ 357 : 1 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/03/24-18:58:48.440 142a0 Reusing MANIFEST /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/IndexedDB/chrome-extension_igpdmclhhlcpoindmhkhillbfhdgoegm_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/24-18:58:48.441 142a0 Recovering log #14
+2026/03/24-18:58:48.441 142a0 Reusing old log /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/IndexedDB/chrome-extension_igpdmclhhlcpoindmhkhillbfhdgoegm_0.indexeddb.leveldb/000014.log 
+2026/03/24-18:58:48.441 142a0 Delete type=2 #12
+2026/03/24-18:58:48.454 142a1 Level-0 table #19: started
+2026/03/24-18:58:48.455 142a1 Level-0 table #19: 4979 bytes OK
+2026/03/24-18:58:48.460 142a1 Delete type=0 #14
+2026/03/24-18:58:48.460 142a1 Manual compaction at level-0 from '\x00\x08\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x09\x00\x00\x00' @ 0 : 0; will stop at '\x00\x08\x00\x00\x05' @ 479 : 1
+2026/03/24-18:58:48.460 142a1 Compacting 1@0 + 1@1 files
+2026/03/24-18:58:48.462 142a1 Generated table #20@0: 153 keys, 5152 bytes
+2026/03/24-18:58:48.462 142a1 Compacted 1@0 + 1@1 files => 5152 bytes
+2026/03/24-18:58:48.465 142a1 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/03/24-18:58:48.465 142a1 Delete type=2 #19
+2026/03/24-18:58:48.465 142a1 Manual compaction at level-0 from '\x00\x08\x00\x00\x05' @ 479 : 1 .. '\x00\x09\x00\x00\x00' @ 0 : 0; will stop at (end)

@@ -1,542 +1,419 @@
 import React, { useState, useEffect } from 'react';
-import CampaignForm from './components/CampaignForm';
-import CampaignList from './components/CampaignList';
-import SessionForm from './components/SessionForm';
-import SessionList from './components/SessionList';
-import NPCForm from './components/NPCForm';
-import NPCList from './components/NPCList';
-import CharacterForm from './components/CharacterForm';
-import CharacterList from './components/CharacterList';
-import HistoryLog from './components/HistoryLog';
+import { HeroUIProvider, ThemeProvider, createTheme, Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Divider, Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Sidebar, SidebarItem, SidebarSection } from '@heroui/react';
+import { CampaignForm } from './components/CampaignForm';
+import { SessionForm } from './components/SessionForm';
+import { NPCForm } from './components/NPCForm';
+import { CharacterForm } from './components/CharacterForm';
+import { SessionTimeline } from './components/SessionTimeline';
+import { LootInventory } from './components/LootInventory';
 
-// Initialize with some sample data
-const initialCampaigns = JSON.parse(localStorage.getItem('campaigns') || '[]');
-const initialSessions = JSON.parse(localStorage.getItem('sessions') || '[]');
-const initialHistoryEvents = JSON.parse(localStorage.getItem('historyEvents') || '[]');
-const initialNPCs = JSON.parse(localStorage.getItem('npcs') || '[]');
-const initialCharacters = JSON.parse(localStorage.getItem('characters') || '[]');
+// Custom theme for D&D aesthetic
+const theme = createTheme({
+  type: 'light',
+  theme: {
+    colors: {
+      background: '#1a1a2e',
+      foreground: '#e94560',
+      primary: {
+        50: '#f0f9ff',
+        100: '#e0f2fe',
+        200: '#bae6fd',
+        300: '#7dd3fc',
+        400: '#38bdf8',
+        500: '#0ea5e9',
+        600: '#0284c7',
+        700: '#0369a1',
+        800: '#075985',
+        900: '#0c4a6e',
+      },
+      secondary: {
+        50: '#f8fafc',
+        100: '#f1f5f9',
+        200: '#e2e8f0',
+        300: '#cbd5e1',
+        400: '#94a3b8',
+        500: '#64748b',
+        600: '#475569',
+        700: '#334155',
+        800: '#1e293b',
+        900: '#0f172a',
+      },
+      accent: {
+        50: '#fff7ed',
+        100: '#ffedd5',
+        200: '#fed7aa',
+        300: '#fdba74',
+        400: '#fb923c',
+        500: '#f97316',
+        600: '#ea580c',
+        700: '#c2410c',
+        800: '#9a3412',
+        900: '#7c2d12',
+      }
+    }
+  }
+});
 
 function App() {
-  const [campaigns, setCampaigns] = useState(initialCampaigns);
-  const [sessions, setSessions] = useState(initialSessions);
-  const [historyEvents, setHistoryEvents] = useState(initialHistoryEvents);
-  const [npcs, setNPCs] = useState(initialNPCs);
-  const [characters, setCharacters] = useState(initialCharacters);
-  const [selectedCampaignId, setSelectedCampaignId] = useState(null);
-  const [view, setView] = useState('campaigns'); // campaigns, sessions, history, npcs, characters
-  const [editingCampaign, setEditingCampaign] = useState(null);
-  const [editingSession, setEditingSession] = useState(null);
-  const [editingNPC, setEditingNPC] = useState(null);
-  const [editingCharacter, setEditingCharacter] = useState(null);
+  const [view, setView] = useState('campaigns');
+  const [campaigns, setCampaigns] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [npcs, setNpcs] = useState([]);
+  const [characters, setCharacters] = useState([]);
+  const [loot, setLoot] = useState([]);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [timeline, setTimeline] = useState([]);
 
-  // Persist campaigns to localStorage
+  // Load data from localStorage on mount
   useEffect(() => {
-    localStorage.setItem('campaigns', JSON.stringify(campaigns));
-  }, [campaigns]);
+    const savedCampaigns = localStorage.getItem('dndCampaigns');
+    const savedSessions = localStorage.getItem('dndSessions');
+    const savedNpcs = localStorage.getItem('dndNpcs');
+    const savedCharacters = localStorage.getItem('dndCharacters');
+    const savedLoot = localStorage.getItem('dndLoot');
+    const savedTimeline = localStorage.getItem('dndTimeline');
 
-  // Persist sessions to localStorage
+    if (savedCampaigns) setCampaigns(JSON.parse(savedCampaigns));
+    if (savedSessions) setSessions(JSON.parse(savedSessions));
+    if (savedNpcs) setNpcs(JSON.parse(savedNpcs));
+    if (savedCharacters) setCharacters(JSON.parse(savedCharacters));
+    if (savedLoot) setLoot(JSON.parse(savedLoot));
+    if (savedTimeline) setTimeline(JSON.parse(savedTimeline));
+  }, []);
+
+  // Save data to localStorage when state changes
   useEffect(() => {
-    localStorage.setItem('sessions', JSON.stringify(sessions));
-  }, [sessions]);
+    localStorage.setItem('dndCampaigns', JSON.stringify(campaigns));
+    localStorage.setItem('dndSessions', JSON.stringify(sessions));
+    localStorage.setItem('dndNpcs', JSON.stringify(npcs));
+    localStorage.setItem('dndCharacters', JSON.stringify(characters));
+    localStorage.setItem('dndLoot', JSON.stringify(loot));
+    localStorage.setItem('dndTimeline', JSON.stringify(timeline));
+  }, [campaigns, sessions, npcs, characters, loot, timeline]);
 
-  // Persist history events to localStorage
-  useEffect(() => {
-    localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
-  }, [historyEvents]);
-
-  // Persist NPCs to localStorage
-  useEffect(() => {
-    localStorage.setItem('npcs', JSON.stringify(npcs));
-  }, [npcs]);
-
-  // Persist characters to localStorage
-  useEffect(() => {
-    localStorage.setItem('characters', JSON.stringify(characters));
-  }, [characters]);
-
-  // Campaign handlers
-  const handleSaveCampaign = (campaignData) => {
-    if (editingCampaign) {
-      setCampaigns(campaigns.map(c => 
-        c.id === editingCampaign.id 
-          ? { ...c, ...campaignData, updatedAt: new Date().toISOString() }
-          : c
-      ));
-      setEditingCampaign(null);
-    } else {
-      const newCampaign = {
-        id: Date.now().toString(),
-        name: campaignData.name,
-        description: campaignData.description,
-        theme: campaignData.theme,
-        factions: campaignData.factions || [],
-        tone: campaignData.tone,
-        worldLore: campaignData.worldLore || [],
-        locations: campaignData.locations || [],
-        maps: campaignData.maps || [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      setCampaigns([...campaigns, newCampaign]);
-    }
+  // Navigation handler
+  const switchView = (newView) => {
+    setView(newView);
+    setSelectedCampaign(null);
   };
-
-  const handleSelectCampaign = (campaign) => {
-    setEditingCampaign(campaign);
-    setView('campaigns');
-  };
-
-  const handleDeleteCampaign = (campaignId) => {
-    if (window.confirm('Are you sure you want to delete this campaign?')) {
-      setCampaigns(campaigns.filter(c => c.id !== campaignId));
-      setSessions(sessions.filter(s => s.campaignId !== campaignId));
-      setNPCs(npcs.filter(n => !campaigns.find(c => c.id === campaignId) || n.campaignId !== campaignId));
-      setCharacters(characters.filter(c => !campaigns.find(c2 => c2.id === campaignId) || c.campaignId !== campaignId));
-      if (selectedCampaignId === campaignId) {
-        setSelectedCampaignId(null);
-      }
-      setEditingCampaign(null);
-    }
-  };
-
-  // Session handlers
-  const handleSaveSession = (sessionData) => {
-    if (!selectedCampaignId) {
-      alert('Please select a campaign first');
-      return;
-    }
-
-    if (editingSession) {
-      setSessions(sessions.map(s => 
-        s.id === editingSession.id 
-          ? { ...s, ...sessionData }
-          : s
-      ));
-      setEditingSession(null);
-    } else {
-      const newSession = {
-        id: Date.now().toString(),
-        campaignId: selectedCampaignId,
-        name: sessionData.name,
-        date: sessionData.date,
-        notes: sessionData.notes,
-        events: []
-      };
-      setSessions([...sessions, newSession]);
-    }
-  };
-
-  const handleSelectSession = (session) => {
-    setEditingSession(session);
-    setSelectedCampaignId(session.campaignId);
-    setView('sessions');
-  };
-
-  const handleDeleteSession = (sessionId) => {
-    if (window.confirm('Are you sure you want to delete this session?')) {
-      setSessions(sessions.filter(s => s.id !== sessionId));
-      setEditingSession(null);
-    }
-  };
-
-  // NPC handlers
-  const handleSaveNPC = (npcData) => {
-    if (editingNPC) {
-      setNPCs(npcs.map(n => 
-        n._id === editingNPC._id 
-          ? { ...n, ...npcData }
-          : n
-      ));
-      setEditingNPC(null);
-    } else {
-      const newNPC = {
-        _id: Date.now().toString(),
-        campaignId: selectedCampaignId,
-        ...npcData
-      };
-      setNPCs([...npcs, newNPC]);
-    }
-  };
-
-  const handleSelectNPC = (npc) => {
-    setEditingNPC(npc);
-    setView('npcs');
-  };
-
-  const handleDeleteNPC = (npcId) => {
-    if (window.confirm('Are you sure you want to delete this NPC?')) {
-      setNPCs(npcs.filter(n => n._id !== npcId));
-      setEditingNPC(null);
-    }
-  };
-
-  // Character handlers
-  const handleSaveCharacter = (characterData) => {
-    if (editingCharacter) {
-      setCharacters(characters.map(c => 
-        c.id === editingCharacter.id 
-          ? { ...c, ...characterData }
-          : c
-      ));
-      setEditingCharacter(null);
-    } else {
-      const newCharacter = {
-        id: Date.now().toString(),
-        campaignId: selectedCampaignId,
-        ...characterData
-      };
-      setCharacters([...characters, newCharacter]);
-    }
-  };
-
-  const handleSelectCharacter = (character) => {
-    setEditingCharacter(character);
-    setView('characters');
-  };
-
-  const handleDeleteCharacter = (characterId) => {
-    if (window.confirm('Are you sure you want to delete this character?')) {
-      setCharacters(characters.filter(c => c.id !== characterId));
-      setEditingCharacter(null);
-    }
-  };
-
-  // History event handlers
-  const handleAddEvent = (event) => {
-    setHistoryEvents([...historyEvents, event]);
-  };
-
-  const handleDeleteEvent = (eventId) => {
-    setHistoryEvents(historyEvents.filter(e => e.id !== eventId));
-  };
-
-  // View switching
-  const switchView = (viewName) => {
-    setView(viewName);
-    setEditingCampaign(null);
-    setEditingSession(null);
-    setEditingNPC(null);
-    setEditingCharacter(null);
-  };
-
-  // Get sessions for the selected campaign
-  const campaignSessions = sessions.filter(s => s.campaignId === selectedCampaignId);
-
-  // Get NPCs and Characters for the selected campaign
-  const campaignNPCs = npcs.filter(n => n.campaignId === selectedCampaignId);
-  const campaignCharacters = characters.filter(c => c.campaignId === selectedCampaignId);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>D&D Campaign Manager</h1>
-        <nav className="nav-menu">
-          <button 
-            className={view === 'campaigns' ? 'active' : ''} 
-            onClick={() => switchView('campaigns')}
-          >
-            Campaigns
-          </button>
-          <button 
-            className={view === 'sessions' ? 'active' : ''} 
-            onClick={() => switchView('sessions')}
-          >
-            Sessions
-          </button>
-          <button 
-            className={view === 'npcs' ? 'active' : ''} 
-            onClick={() => switchView('npcs')}
-          >
-            NPCs
-          </button>
-          <button 
-            className={view === 'characters' ? 'active' : ''} 
-            onClick={() => switchView('characters')}
-          >
-            Characters
-          </button>
-          <button 
-            className={view === 'history' ? 'active' : ''} 
-            onClick={() => switchView('history')}
-          >
-            Timeline & History
-          </button>
-        </nav>
-      </header>
+    <HeroUIProvider>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          {/* Header */}
+          <header className="App-header">
+            <Navbar isBordered className="bg-gray-900">
+              <NavbarBrand>
+                <h1 className="text-2xl font-bold text-red-500">D&D Campaign Manager</h1>
+              </NavbarBrand>
+              <NavbarContent className="hidden sm:flex gap-4">
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'campaigns'} onClick={() => switchView('campaigns')}>
+                    Campaigns
+                  </Link>
+                </NavbarItem>
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'sessions'} onClick={() => switchView('sessions')}>
+                    Sessions
+                  </Link>
+                </NavbarItem>
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'npcs'} onClick={() => switchView('npcs')}>
+                    NPCs
+                  </Link>
+                </NavbarItem>
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'characters'} onClick={() => switchView('characters')}>
+                    Characters
+                  </Link>
+                </NavbarItem>
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'history'} onClick={() => switchView('history')}>
+                    Timeline
+                  </Link>
+                </NavbarItem>
+                <NavbarItem>
+                  <Link color="foreground" className="text-white" isActive={view === 'loot'} onClick={() => switchView('loot')}>
+                    Loot & Inventory
+                  </Link>
+                </NavbarItem>
+              </NavbarContent>
+            </Navbar>
+          </header>
 
-      <main className="App-main">
-        {view === 'campaigns' && (
-          <div className="campaign-section">
-            <h2>Campaign Management</h2>
-            
-            <div className="form-section">
-              <h3>{editingCampaign ? 'Edit Campaign' : 'Create New Campaign'}</h3>
-              <CampaignForm 
-                onSubmit={handleSaveCampaign} 
-                initialData={editingCampaign}
-              />
-              {editingCampaign && (
-                <button onClick={() => setEditingCampaign(null)}>Cancel Edit</button>
+          {/* Sidebar Layout */}
+          <div className="App-container">
+            <aside className="sidebar">
+              <Sidebar aria-label="Campaign Navigation" className="bg-gray-800">
+                <SidebarSection className="bg-gray-900">
+                  <h3 className="text-lg font-bold text-white px-4 py-2">Campaigns</h3>
+                  {campaigns.map((campaign) => (
+                    <SidebarItem
+                      key={campaign.id}
+                      className={`text-gray-300 hover:bg-gray-700 cursor-pointer ${selectedCampaign?.id === campaign.id ? 'bg-gray-700 text-white' : ''}`}
+                      onClick={() => setSelectedCampaign(campaign)}
+                    >
+                      {campaign.name}
+                    </SidebarItem>
+                  ))}
+                  {campaigns.length === 0 && (
+                    <SidebarItem className="text-gray-500 px-4 py-2 italic">
+                      No campaigns yet. Create one!
+                    </SidebarItem>
+                  )}
+                </SidebarSection>
+
+                <SidebarSection className="bg-gray-900 mt-4">
+                  <h3 className="text-lg font-bold text-white px-4 py-2">Quick Actions</h3>
+                  <SidebarItem className="text-blue-400 hover:bg-gray-700 cursor-pointer px-4 py-2">
+                    <button onClick={() => switchView('campaigns')} className="w-full text-left">+ New Campaign</button>
+                  </SidebarItem>
+                  <SidebarItem className="text-blue-400 hover:bg-gray-700 cursor-pointer px-4 py-2">
+                    <button onClick={() => switchView('sessions')} className="w-full text-left">+ New Session</button>
+                  </SidebarItem>
+                  <SidebarItem className="text-purple-400 hover:bg-gray-700 cursor-pointer px-4 py-2">
+                    <button onClick={() => switchView('npcs')} className="w-full text-left">+ New NPC</button>
+                  </SidebarItem>
+                  <SidebarItem className="text-green-400 hover:bg-gray-700 cursor-pointer px-4 py-2">
+                    <button onClick={() => switchView('characters')} className="w-full text-left">+ New Character</button>
+                  </SidebarItem>
+                </SidebarSection>
+              </Sidebar>
+            </aside>
+
+            {/* Main Content */}
+            <main className="App-main">
+              {view === 'campaigns' && (
+                <CampaignForm
+                  campaigns={campaigns}
+                  setCampaigns={setCampaigns}
+                  switchView={switchView}
+                  selectedCampaign={selectedCampaign}
+                  setSelectedCampaign={setSelectedCampaign}
+                />
               )}
-            </div>
 
-            <div className="campaign-list-section">
-              <h3>Select Campaign</h3>
-              <CampaignList 
-                campaigns={campaigns} 
-                onSelect={(campaign) => {
-                  setSelectedCampaignId(campaign.id);
-                  handleSelectCampaign(null);
-                }}
-                onDelete={handleDeleteCampaign}
-              />
-            </div>
+              {view === 'sessions' && (
+                <SessionForm
+                  sessions={sessions}
+                  setSessions={setSessions}
+                  selectedCampaign={selectedCampaign}
+                  campaigns={campaigns}
+                />
+              )}
 
-            {selectedCampaignId && (
-              <div className="selected-campaign-info">
-                <h3>Current Campaign: {campaigns.find(c => c.id === selectedCampaignId)?.name}</h3>
-                <p>{campaigns.find(c => c.id === selectedCampaignId)?.description}</p>
-              </div>
-            )}
+              {view === 'npcs' && (
+                <NPCForm
+                  npcs={npcs}
+                  setNpcs={setNpcs}
+                  selectedCampaign={selectedCampaign}
+                  campaigns={campaigns}
+                />
+              )}
+
+              {view === 'characters' && (
+                <CharacterForm
+                  characters={characters}
+                  setCharacters={setCharacters}
+                  selectedCampaign={selectedCampaign}
+                  campaigns={campaigns}
+                />
+              )}
+
+              {view === 'history' && (
+                <SessionTimeline
+                  timeline={timeline}
+                  setTimeline={setTimeline}
+                  sessions={sessions}
+                />
+              )}
+
+              {view === 'loot' && (
+                <LootInventory
+                  loot={loot}
+                  setLoot={setLoot}
+                  selectedCampaign={selectedCampaign}
+                  campaigns={campaigns}
+                />
+              )}
+            </main>
           </div>
-        )}
 
-        {view === 'sessions' && (
-          <div className="session-section">
-            <h2>Session Management</h2>
-            {!selectedCampaignId ? (
-              <p>Please select a campaign first to manage sessions.</p>
-            ) : (
-              <>
-                <div className="form-section">
-                  <h3>{editingSession ? 'Edit Session' : 'Create New Session'}</h3>
-                  <SessionForm 
-                    onSubmit={handleSaveSession} 
-                    initialData={editingSession}
-                  />
-                  {editingSession && (
-                    <button onClick={() => setEditingSession(null)}>Cancel Edit</button>
-                  )}
-                </div>
-
-                <div className="session-list-section">
-                  <h3>Sessions for {campaigns.find(c => c.id === selectedCampaignId)?.name}</h3>
-                  <SessionList 
-                    sessions={campaignSessions} 
-                    onSelect={handleSelectSession}
-                    onDelete={handleDeleteSession}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {view === 'npcs' && (
-          <div className="npc-section">
-            <h2>NPC Management</h2>
-            {!selectedCampaignId ? (
-              <p>Please select a campaign first to manage NPCs.</p>
-            ) : (
-              <>
-                <div className="form-section">
-                  <h3>{editingNPC ? 'Edit NPC' : 'Create New NPC'}</h3>
-                  <NPCForm 
-                    npc={editingNPC} 
-                    onSave={handleSaveNPC}
-                    onCancel={() => setEditingNPC(null)}
-                    onDelete={handleDeleteNPC}
-                  />
-                </div>
-
-                <div className="npc-list-section">
-                  <h3>NPCs for {campaigns.find(c => c.id === selectedCampaignId)?.name}</h3>
-                  <NPCList 
-                    npcs={campaignNPCs} 
-                    onEdit={handleSelectNPC}
-                    onDelete={handleDeleteNPC}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {view === 'characters' && (
-          <div className="character-section">
-            <h2>Character Management</h2>
-            {!selectedCampaignId ? (
-              <p>Please select a campaign first to manage characters.</p>
-            ) : (
-              <>
-                <div className="form-section">
-                  <h3>{editingCharacter ? 'Edit Character' : 'Create New Character'}</h3>
-                  <CharacterForm 
-                    onSubmit={handleSaveCharacter} 
-                    initialData={editingCharacter}
-                  />
-                  {editingCharacter && (
-                    <button onClick={() => setEditingCharacter(null)}>Cancel Edit</button>
-                  )}
-                </div>
-
-                <div className="character-list-section">
-                  <h3>Characters for {campaigns.find(c => c.id === selectedCampaignId)?.name}</h3>
-                  <CharacterList 
-                    characters={campaignCharacters} 
-                    onEdit={handleSelectCharacter}
-                    onDelete={handleDeleteCharacter}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {view === 'history' && (
-          <div className="history-section">
-            <HistoryLog 
-              events={historyEvents} 
-              onAddEvent={handleAddEvent} 
-              onDeleteEvent={handleDeleteEvent}
-            />
-          </div>
-        )}
-      </main>
-
-      <style>{`
-        .App {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-        .App-header {
-          text-align: center;
-          margin-bottom: 30px;
-        }
-        .App-header h1 {
-          color: #2c3e50;
-          margin-bottom: 20px;
-        }
-        .nav-menu {
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-        }
-        .nav-menu button {
-          padding: 10px 20px;
-          font-size: 16px;
-          cursor: pointer;
-          background: #3498db;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          transition: background 0.2s;
-        }
-        .nav-menu button:hover {
-          background: #2980b9;
-        }
-        .nav-menu button.active {
-          background: #1abc9c;
-          font-weight: bold;
-        }
-        .App-main {
-          background: white;
-          border-radius: 10px;
-          padding: 20px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .form-section {
-          background: #f8f9fa;
-          padding: 20px;
-          border-radius: 8px;
-          margin-bottom: 30px;
-        }
-        .form-section h3 {
-          color: #2c3e50;
-          margin-top: 0;
-        }
-        .campaign-section, .session-section, .npc-section, .character-section {
-          min-height: 400px;
-        }
-        .selected-campaign-info {
-          background: #e8f4fd;
-          padding: 15px;
-          border-radius: 8px;
-          margin-top: 20px;
-        }
-        button {
-          margin: 5px;
-          padding: 8px 16px;
-          cursor: pointer;
-          background: #e74c3c;
-          color: white;
-          border: none;
-          border-radius: 4px;
-        }
-        button[type="submit"] {
-          background: #27ae60;
-        }
-        button.cancel {
-          background: #95a5a6;
-        }
-        ul {
-          list-style: none;
-          padding: 0;
-        }
-        li {
-          background: #f1f1f1;
-          margin: 5px 0;
-          padding: 10px;
-          border-radius: 4px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .character-list {
-          margin-top: 20px;
-        }
-        .character-item {
-          padding: 15px;
-          background: #f9f9f9;
-          border-radius: 8px;
-          margin-bottom: 10px;
-        }
-        .character-header {
-          margin-bottom: 10px;
-        }
-        .character-actions button {
-          margin: 0;
-        }
-        .npc-list {
-          margin-top: 20px;
-        }
-        .npc-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 20px;
-          margin-top: 20px;
-        }
-        .npc-card {
-          background: #f9f9f9;
-          padding: 15px;
-          border-radius: 8px;
-          border: 1px solid #ddd;
-        }
-        .npc-status {
-          font-weight: bold;
-          color: #27ae60;
-        }
-        .npc-stats, .npc-combat, .npc-sessions {
-          margin: 10px 0;
-          font-size: 0.9em;
-        }
-        .npc-actions button {
-          margin: 0 5px 0 0;
-        }
-      `}</style>
-    </div>
+          <style>{`
+            .App {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              min-height: 100vh;
+              background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            }
+            .App-header {
+              background: rgba(26, 26, 46, 0.95);
+              backdrop-filter: blur(10px);
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .App-container {
+              display: flex;
+              max-width: 1600px;
+              margin: 0 auto;
+              min-height: calc(100vh - 80px);
+            }
+            .sidebar {
+              width: 280px;
+              flex-shrink: 0;
+            }
+            .App-main {
+              flex-grow: 1;
+              padding: 20px;
+              overflow-y: auto;
+            }
+            .form-section {
+              background: rgba(255, 255, 255, 0.05);
+              padding: 20px;
+              border-radius: 12px;
+              margin-bottom: 20px;
+              backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .form-section h3 {
+              color: #e94560;
+              margin-top: 0;
+              border-bottom: 2px solid #e94560;
+              padding-bottom: 8px;
+            }
+            .campaign-section, .session-section, .npc-section, .character-section {
+              min-height: 400px;
+            }
+            .selected-campaign-info {
+              background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+              padding: 15px;
+              border-radius: 8px;
+              margin-top: 20px;
+              border-left: 4px solid #e94560;
+            }
+            button {
+              margin: 5px;
+              padding: 10px 20px;
+              cursor: pointer;
+              border: none;
+              border-radius: 6px;
+              font-weight: 500;
+              transition: all 0.3s;
+            }
+            button[type="submit"] {
+              background: linear-gradient(135deg, #e94560 0%, #c0392b 100%);
+              color: white;
+            }
+            button[type="submit"]:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+            }
+            button.cancel {
+              background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+              color: white;
+            }
+            button.cancel:hover {
+              background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            }
+            ul {
+              list-style: none;
+              padding: 0;
+            }
+            li {
+              background: rgba(255, 255, 255, 0.05);
+              margin: 8px 0;
+              padding: 12px;
+              border-radius: 8px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .character-list {
+              margin-top: 20px;
+            }
+            .character-item {
+              padding: 15px;
+              background: rgba(255, 255, 255, 0.05);
+              border-radius: 8px;
+              margin-bottom: 10px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .character-header {
+              margin-bottom: 10px;
+              font-weight: 600;
+            }
+            .character-actions button {
+              margin: 0 5px 0 0;
+              padding: 6px 12px;
+              font-size: 14px;
+            }
+            .npc-list {
+              margin-top: 20px;
+            }
+            .npc-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+              gap: 20px;
+              margin-top: 20px;
+            }
+            .npc-card {
+              background: rgba(255, 255, 255, 0.05);
+              padding: 15px;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              transition: all 0.3s;
+            }
+            .npc-card:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            }
+            .npc-status {
+              font-weight: bold;
+              color: #27ae60;
+            }
+            .npc-stats, .npc-combat, .npc-sessions {
+              margin: 10px 0;
+              font-size: 0.9em;
+            }
+            .npc-actions button {
+              margin: 0 5px 0 0;
+            }
+            .timeline-event {
+              border-left: 3px solid #e94560;
+              padding-left: 20px;
+              margin: 20px 0;
+              padding-bottom: 20px;
+            }
+            .timeline-date {
+              font-weight: bold;
+              color: #f39c12;
+              margin-bottom: 5px;
+            }
+            .timeline-content {
+              color: #ecf0f1;
+            }
+            .loot-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 12px;
+              background: rgba(255, 255, 255, 0.05);
+              border-radius: 8px;
+              margin-bottom: 10px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .gold-summary {
+              background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+              color: white;
+              padding: 15px;
+              border-radius: 8px;
+              margin: 20px 0;
+              text-align: center;
+            }
+          `}</style>
+        </div>
+      </ThemeProvider>
+    </HeroUIProvider>
   );
 }
 
