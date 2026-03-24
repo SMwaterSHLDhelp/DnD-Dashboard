@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const NPCList = ({ npcs, onEdit, onDelete }) => {
   if (npcs.length === 0) {
     return (
       <div className="empty-state">
-        <p>No NPCs found. <Link to="/npcs/new">Add your first NPC</Link>.</p>
+        <p>No NPCs found. <a href="#" onClick={(e) => e.preventDefault()}>Add your first NPC</a>.</p>
       </div>
     );
   }

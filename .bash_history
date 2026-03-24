@@ -22,3 +22,10 @@ npm run
 npm run start
 ls
 cd ..
+npm run dev
+npm run start
+ls
+ls src
+ls src/components/
+cd ~
+ls
