@@ -1,2 +1,3 @@
-2026/03/23-22:33:10.089 d64e4 Creating DB /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/Extension Rules since it was missing.
-2026/03/23-22:33:10.096 d64e4 Reusing MANIFEST /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/Extension Rules/MANIFEST-000001
+2026/03/23-22:48:03.244 dad32 Reusing MANIFEST /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/Extension Rules/MANIFEST-000001
+2026/03/23-22:48:03.244 dad32 Recovering log #3
+2026/03/23-22:48:03.244 dad32 Reusing old log /home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.config/opera/Default/Extension Rules/000003.log 

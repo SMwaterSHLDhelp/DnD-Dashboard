@@ -1,5 +1,5 @@
 {
-   "checksum": "3395b85d3bc64baae9658d54e6ee029b",
+   "checksum": "c865112e4e774597d32a3b01f8ac6507",
    "roots": {
       "bookmark_bar": {
          "children": [  ],
@@ -264,30 +264,6 @@
                   "name": "Hulu",
                   "type": "url",
                   "url": "https://hulu.com/"
-               }, {
-                  "date_added": "13418793190203187",
-                  "date_last_used": "0",
-                  "guid": "6df0a472-e80e-4f71-888a-84478d3558ac",
-                  "id": "21",
-                  "meta_info": {
-                     "favicon_url": "https://sd-images.operacdn.com/api/v1/images/59b355a1e28716ee5594f04d344da584d1fed45e.png",
-                     "imageData": "https://sd-images.operacdn.com/api/v1/images/78e7e9b2d961b4b0c7d12c89dd2808d187c182e2.png",
-                     "imageDataType": "2",
-                     "imageID": "3984C843F90DD7EE756292971CCB704B771CED72F4624F14A2C0CE83AAD61E26",
-                     "imageType": "2",
-                     "impression_url": "",
-                     "nav_timestamp": "1.774319590313883e+12",
-                     "partner_id": "QOoUJhIzC4h1/DrrXkd2eFb4LCVb264rgOqv5DWmdH4=",
-                     "partner_image_download_url": "https://sd-images.operacdn.com/api/v1/images/78e7e9b2d961b4b0c7d12c89dd2808d187c182e2.png",
-                     "partner_url": "https://cos-rd.com/85/17267?publisher=&source=&campaign=pc-us-adtechnacity-capitalone-sd-feb26-noncos-a",
-                     "ping_url": "https://speeddials.opera.com/api/v1/ping/sd/d4995af5-3ba5-44d8-b593-4795cd3c0787/UU9vVUpoSXpDNGgxL0RyclhrZDJlRmI0TENWYjI2NHJnT3F2NURXbWRIND0=",
-                     "replaceability": "0",
-                     "revision": "20260212",
-                     "server_position": "11"
-                  },
-                  "name": "Capital One Shopping",
-                  "type": "url",
-                  "url": "https://capitaloneshopping.com/"
                }, {
                   "date_added": "13418793190512983",
                   "date_last_used": "0",
