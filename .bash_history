@@ -1,0 +1,2 @@
+echo HELLO_TERMINAL_TEST
+exit
