@@ -29,3 +29,5 @@ ls src
 ls src/components/
 cd ~
 ls
+npm run dev
+npm run start
