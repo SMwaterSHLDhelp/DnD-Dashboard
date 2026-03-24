@@ -1,6 +1,6 @@
 # D&D Character Manager
 
-A comprehensive companion tool for Dungeons & Dragons players and Dungeon Masters.
+A comprehensive companion tool for Dungeon Masters and players to manage campaigns, sessions, characters, and NPCs.
 
 ## Features
 
@@ -18,75 +18,49 @@ A comprehensive companion tool for Dungeons & Dragons players and Dungeon Master
 - **Build Tool**: Create React App (react-scripts)
 - **State Management**: Local component state (planned: Context API or Redux for complex state)
 
-## Getting Started
+## Development Setup
 
 ### Prerequisites
 
-- Node.js (version 16 or higher recommended)
-- npm (version 9 or higher)
+- Node.js >=20.x LTS (current active LTS)
+- npm >=9.x
 
 ### Installation
-
-1. Clone the repository
-2. Navigate to the project directory
-3. Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Development
+### Running the App
 
-To start the development server:
+In the project directory, you can run:
 
 ```bash
 npm start
 ```
 
-This will start the app in development mode.
+This runs the app in the development mode.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Building
+The page will reload if you make edits.
 
-To build the app for production:
+### Building the App
 
 ```bash
 npm run build
 ```
 
-### Testing
+Builds the app for production to the `build` folder.
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-To run tests:
+## Project Status
 
-```bash
-npm test
-```
+See [PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) for current status and blockers.
 
-## Project Structure
+## Development Tasks
 
-```
-src/
-├── components/
-├── pages/
-├── assets/
-├── App.js
-├── index.js
-└── index.css
-```
+See [DEVELOPMENT_TASKS.md](./docs/DEVELOPMENT_TASKS.md) for detailed task list.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgments
-
-- React
-- Create React App
-- D&D Community
+Contributions are welcome! Please open an issue or submit a pull request.
