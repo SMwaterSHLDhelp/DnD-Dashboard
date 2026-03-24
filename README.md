@@ -38,49 +38,40 @@ Launches the test runner in the interactive watch mode.
 Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-#### `npm run eject`
+The build is minified and the filenames include the hashes.
+Your app is ready to be deployed!
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Development Status
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- ✅ Core project structure set up
+- ✅ Campaign & Session components (UI complete)
+- ✅ NPC & Character tracking forms implemented
+- ✅ Timeline/History log working
+- ⏳ Combat & Loot tracking in progress
+- ⏳ Proxy configuration for multiplayer access (Linux host: 192.168.1.100)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Multiplayer Access
 
-## Features
+The development server is accessible over the local network. Ensure your firewall allows traffic on port 3000.
 
-- Campaign & World Building
-- Session Management
-- NPC Tracker
-- Player & Character Tracking
-- Combat & Encounter Tools
-- Loot & Inventory Management
+To expose the app to other devices on your LAN, verify:
+1. Your Linux machine’s IP address (`ip addr show`)
+2. The app starts with `On Your Network: http://<your-ip>:3000`
+3. Other devices use that URL in their browser
 
-## Development Notes
+⚠️ **Production deployment**: Use a reverse proxy (e.g., nginx) with HTTPS for secure multiplayer access.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Troubleshooting
 
-### Project Status
-
-- [x] Basic React App structure
-- [x] Public directory with index.html
-- [ ] Campaign creation/edit form
-- [ ] World-building fields (theme, factions, tone)
-- [ ] Session planning view
-- [ ] NPC creation with stat blocks
-- [ ] Character form completion
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+If you encounter integrity checksum failures:
+```
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
-
-- [Create React App](https://github.com/facebook/create-react-app)
-- [React](https://reactjs.org/)
-- [Dungeons & Dragons](https://dnd.wizards.com/)
+MIT
