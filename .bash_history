@@ -21,3 +21,4 @@ exit
 npm run
 npm run start
 ls
+cd ..
