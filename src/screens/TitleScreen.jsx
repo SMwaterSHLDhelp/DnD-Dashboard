@@ -1,67 +1,65 @@
 import React from 'react';
-import { Button, Card, CardBody, CardFooter, CardHeader, Image } from '@heroui/react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Button } from '@heroui/react';
 
 function TitleScreen() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
-      <div className="max-w-4xl w-full text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          D&D Campaign Manager
-        </h1>
-        <p className="text-xl text-gray-600 mb-10">
-          A complete tool for DMs to organize campaigns, manage sessions, track NPCs, and more.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">Campaign & World Building</CardHeader>
-            <CardBody>
-              <p>Store story, lore, maps, locations, factions, and history.</p>
-            </CardBody>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">Session Management</CardHeader>
-            <CardBody>
-              <p>Plan sessions, notes, pacing, and post-session summaries.</p>
-            </CardBody>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">NPC & Player Tracking</CardHeader>
-            <CardBody>
-              <p>Manage NPC rosters, relationships, and player characters.</p>
-            </CardBody>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">Combat Tools</CardHeader>
-            <CardBody>
-              <p>Initiative tracking, monster stat blocks, and condition tracking.</p>
-            </CardBody>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">Loot & Inventory</CardHeader>
-            <CardBody>
-              <p>Track gold, items, and magic items distributed.</p>
-            </CardBody>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader className="font-bold text-lg">Rules & Generators</CardHeader>
-            <CardBody>
-              <p>Quick reference for spells and random content generators.</p>
-            </CardBody>
-          </Card>
-        </div>
-        <div className="flex justify-center gap-4">
-          <Button
-            color="primary"
-            size="lg"
-            onClick={() => navigate('/app')}
-            className="font-bold"
-          >
-            Start Campaign
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-6">
+      <h1 className="text-5xl font-extrabold mb-6 text-gray-900">D&D Campaign Manager</h1>
+      <p className="text-xl text-gray-600 mb-12 max-w-2xl text-center">
+        A comprehensive tool for Dungeon Masters to manage campaigns, sessions, NPCs, and combat encounters
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+        <Link to="/campaign">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Campaign & World Building
           </Button>
-        </div>
+        </Link>
+        <Link to="/sessions">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Session Management
+          </Button>
+        </Link>
+        <Link to="/npcs">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            NPC Tracker
+          </Button>
+        </Link>
+        <Link to="/players">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Player Tracking
+          </Button>
+        </Link>
+        <Link to="/combat">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Combat & Encounters
+          </Button>
+        </Link>
+        <Link to="/loot">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Loot & Inventory
+          </Button>
+        </Link>
+        <Link to="/rules">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Rules Reference
+          </Button>
+        </Link>
+        <Link to="/notes">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Notes & Secrets
+          </Button>
+        </Link>
+        <Link to="/timeline">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Timeline
+          </Button>
+        </Link>
+        <Link to="/random">
+          <Button color="primary" size="lg" className="w-full text-lg">
+            Random Generators
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -1,118 +1,22 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
 #root {
-  display: flex;
-  height: 100vh;
-}
-
-.app {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.sidebar {
-  background-color: #1c1c1e;
-  border-right: 1px solid #2c2c2e;
-}
-
-.main-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.navbar {
-  background-color: #2d2d30;
-  padding: 0 20px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-}
-
-.navbar h1 {
-  margin: 0;
-  color: white;
-  font-size: 18px;
-}
-
-.view-container {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.dashboard {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.stats > div {
-  background-color: #2d2d30;
-  padding: 16px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: #8e8e93;
-}
-
-.campaign-list, .session-list, .npc-list, .character-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.campaigns-container, .sessions-container, .npcs-container, .characters-container, .timeline-container, .loot-container {
-  padding: 20px;
-}
-
-/* HeroUI overrides */
-.hp-card {
-  background-color: #1c1c1e;
-  border: 1px solid #2c2c2e;
-  margin-bottom: 16px;
-}
-
-.hp-card-header {
-  background-color: #2c2c2e;
-  padding: 12px 16px;
-  border-bottom: 1px solid #3a3a3c;
-}
-
-.hp-card-body {
-  padding: 16px;
-}
-
-.hp-card-footer {
-  background-color: #2c2c2e;
-  padding: 12px 16px;
-  border-top: 1px solid #3a3a3c;
-}
-
-.hp-button {
-  margin-right: 8px;
 }
