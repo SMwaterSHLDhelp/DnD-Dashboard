@@ -1,5 +1,5 @@
-import React from 'react';
-import NPCDetail from './NPCDetail';
+import React, { useState } from 'react';
+import { Card, CardBody, CardHeader, CardFooter, Button } from '@heroui/react';
 
 const NPCList = ({ npcs, onEdit, onDelete, onSelect }) => {
   const [selectedNPC, setSelectedNPC] = useState(null);
@@ -13,60 +13,41 @@ const NPCList = ({ npcs, onEdit, onDelete, onSelect }) => {
   }
 
   return (
-    <div className="space-y-3">
-      {npcs.map(npc => (
-        <div
-          key={npc.id}
-          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-        >
-          <div className="flex justify-between items-start">
-            <div className="cursor-pointer" onClick={() => setSelectedNPC(npc)}>
-              <h3 className="font-semibold">{npc.name}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {npc.role || 'Unknown Role'} • {npc.status || 'Status unknown'}
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => onEdit(npc)}
-                className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(npc.id)}
-                className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-          {npc.description && (
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-              {npc.description}
-            </p>
-          )}
-          <div className="mt-2 flex gap-2">
-            <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-              {npc.motivation || 'No motivation set'}
-            </span>
-            <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-              {npc.relationship || 'Neutral'}
-            </span>
-          </div>
-        </div>
-      ))}
-
-      {selectedNPC && (
-        <NPCDetail
-          npc={selectedNPC}
-          onClose={() => setSelectedNPC(null)}
-          onSave={(updatedNPC) => {
-            onEdit(updatedNPC);
-            setSelectedNPC(null);
+    <div className="npc-list">
+      {npcs.map((npc) => (
+        <Card
+          key={npc.id || npc.name}
+          isHoverable
+          isPressable
+          onClick={() => {
+            setSelectedNPC(npc);
+            if (onSelect) onSelect(npc.id || npc.name);
           }}
-        />
-      )}
+        >
+          <CardHeader>
+            <h3>{npc.name || 'Unknown NPC'}</h3>
+            <small>{npc.status || 'Status unknown'}</small>
+          </CardHeader>
+          <CardBody>
+            <p>{npc.description || 'No description'}</p>
+            <p><strong>Motivation:</strong> {npc.motivation || 'Unknown'}</p>
+          </CardBody>
+          <CardFooter>
+            <Button size="sm" variant="flat" color="primary" onClick={(e) => {
+              e.stopPropagation();
+              if (onEdit) onEdit(npc);
+            }}>
+              Edit
+            </Button>
+            <Button size="sm" variant="flat" color="danger" onClick={(e) => {
+              e.stopPropagation();
+              if (onDelete) onDelete(npc);
+            }}>
+              Delete
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   );
 };

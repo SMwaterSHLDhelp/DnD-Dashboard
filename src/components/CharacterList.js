@@ -1,8 +1,8 @@
-import React from 'react';
-import CharacterDetail from './CharacterDetail';
+import React, { useState } from 'react';
+import { Card, CardBody, CardHeader, CardFooter, Button } from '@heroui/react';
 
 const CharacterList = ({ characters, onEdit, onDelete, onSelect }) => {
-  const [selectedCharacter, setSelectedCharacter] = React.useState(null);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   if (characters.length === 0) {
     return (
@@ -13,61 +13,43 @@ const CharacterList = ({ characters, onEdit, onDelete, onSelect }) => {
   }
 
   return (
-    <div className="space-y-3">
-      {characters.map(character => (
-        <div
-          key={character.id}
-          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-        >
-          <div className="flex justify-between items-start">
-            <div className="cursor-pointer" onClick={() => setSelectedCharacter(character)}>
-              <h3 className="font-semibold">
-                {character.playerName} - {character.characterName}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Level {character.level || 1} {character.class || 'Classless'} ({character.race || 'Unknown Race'})
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => onEdit(character)}
-                className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(character.id)}
-                className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-          {character.backstory && (
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-              {character.backstory}
-            </p>
-          )}
-          {character.questThreads && (
-            <div className="mt-2">
-              <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-2 py-1 rounded">
-                Quest: {character.questThreads}
-              </span>
-            </div>
-          )}
-        </div>
-      ))}
-
-      {selectedCharacter && (
-        <CharacterDetail
-          character={selectedCharacter}
-          onClose={() => setSelectedCharacter(null)}
-          onSave={(updatedCharacter) => {
-            onEdit(updatedCharacter);
-            setSelectedCharacter(null);
+    <div className="character-list">
+      {characters.map((character) => (
+        <Card
+          key={character.id || character.name}
+          isHoverable
+          isPressable
+          onClick={() => {
+            setSelectedCharacter(character);
+            if (onSelect) onSelect(character.id || character.name);
           }}
-        />
-      )}
+        >
+          <CardHeader>
+            <h3>{character.name || 'Unnamed Character'}</h3>
+            <small>{character.class && character.level ? `${character.class} ${character.level}` : 'Class/Level unknown'}</small>
+          </CardHeader>
+          <CardBody>
+            <p>{character.backstory || 'No backstory'}</p>
+            {character.race && <p><strong>Race:</strong> {character.race}</p>}
+            {character.class && <p><strong>Class:</strong> {character.class}</p>}
+            {character.level && <p><strong>Level:</strong> {character.level}</p>}
+          </CardBody>
+          <CardFooter>
+            <Button size="sm" variant="flat" color="primary" onClick={(e) => {
+              e.stopPropagation();
+              if (onEdit) onEdit(character);
+            }}>
+              Edit
+            </Button>
+            <Button size="sm" variant="flat" color="danger" onClick={(e) => {
+              e.stopPropagation();
+              if (onDelete) onDelete(character);
+            }}>
+              Delete
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   );
 };
