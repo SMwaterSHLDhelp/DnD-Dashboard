@@ -1,0 +1,32 @@
+{
+  "name": "dnd-campaign-manager",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@heroui/react": "^2.4.8",
+    "@heroui/styles": "^2.2.6",
+    "@heroicons/react": "^2.1.5",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.9",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "vite": "^5.4.8"
+  }
+}
