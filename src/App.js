@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CampaignManager from './components/CampaignManager';
 import SessionPlanner from './components/SessionPlanner';
-import NPCForm from './components/NPCForm';
+import NPCManager from './components/NPCManager';
 import CharacterForm from './components/CharacterForm';
 import HistoryLog from './components/HistoryLog';
 import LootInventory from './components/LootInventory';
@@ -90,10 +90,10 @@ const App = () => {
               />
             )}
             {activeTab === 'npcs' && (
-              <NPCForm
-                onSave={addNPC}
-                onCancel={() => {}}
-                onDelete={() => {}}
+              <NPCManager
+                npcs={npcs}
+                addNPC={addNPC}
+                updateNPC={updateNPC}
               />
             )}
             {activeTab === 'characters' && (
@@ -117,6 +117,7 @@ const App = () => {
               <HistoryLog
                 historyLog={historyLog}
                 addHistoryEntry={addHistoryEntry}
+                onDeleteEvent={(id) => setHistoryLog(prev => prev.filter(e => e.id !== id))}
               />
             )}
           </div>
