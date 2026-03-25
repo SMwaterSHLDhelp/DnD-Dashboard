@@ -1,6 +1,9 @@
 import React from 'react';
+import NPCDetail from './NPCDetail';
 
-const NPCList = ({ npcs, onEdit, onDelete }) => {
+const NPCList = ({ npcs, onEdit, onDelete, onSelect }) => {
+  const [selectedNPC, setSelectedNPC] = useState(null);
+
   if (npcs.length === 0) {
     return (
       <div className="empty-state">
@@ -10,38 +13,60 @@ const NPCList = ({ npcs, onEdit, onDelete }) => {
   }
 
   return (
-    <div className="npc-list">
-      <h2>NPCs</h2>
-      <div className="npc-grid">
-        {npcs.map((npc) => (
-          <div key={npc._id} className="npc-card">
-            <h3>{npc.name}</h3>
-            <p className="npc-status">{npc.status}</p>
-            <p className="npc-description">{npc.description}</p>
-            <div className="npc-stats">
-              <span>STR: {npc.stats.strength}</span>
-              <span>DEX: {npc.stats.dexterity}</span>
-              <span>CON: {npc.stats.constitution}</span>
-              <span>INT: {npc.stats.intelligence}</span>
-              <span>WIS: {npc.stats.wisdom}</span>
-              <span>CHA: {npc.stats.charisma}</span>
+    <div className="space-y-3">
+      {npcs.map(npc => (
+        <div
+          key={npc.id}
+          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+        >
+          <div className="flex justify-between items-start">
+            <div className="cursor-pointer" onClick={() => setSelectedNPC(npc)}>
+              <h3 className="font-semibold">{npc.name}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {npc.role || 'Unknown Role'} • {npc.status || 'Status unknown'}
+              </p>
             </div>
-            <div className="npc-combat">
-              <span>AC: {npc.combat.armorClass}</span>
-              <span>HP: {npc.combat.hitPoints}</span>
-              <span>Speed: {npc.combat.speed}</span>
-              <span>Init: {npc.combat.initiative}</span>
-            </div>
-            <div className="npc-sessions">
-              <strong>Sessions:</strong> {npc.sessions.length > 0 ? npc.sessions.join(', ') : 'None'}
-            </div>
-            <div className="npc-actions">
-              <button onClick={() => onEdit(npc)}>Edit</button>
-              <button onClick={() => onDelete(npc._id)}>Delete</button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => onEdit(npc)}
+                className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => onDelete(npc.id)}
+                className="px-3 py-1 bg-red-500 text-white rounded text-sm"
+              >
+                Delete
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+          {npc.description && (
+            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+              {npc.description}
+            </p>
+          )}
+          <div className="mt-2 flex gap-2">
+            <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+              {npc.motivation || 'No motivation set'}
+            </span>
+            <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+              {npc.relationship || 'Neutral'}
+            </span>
+          </div>
+        </div>
+      ))}
+
+      {selectedNPC && (
+        <NPCDetail
+          npc={selectedNPC}
+          onClose={() => setSelectedNPC(null)}
+          onSave={(updatedNPC) => {
+            onEdit(updatedNPC);
+            setSelectedNPC(null);
+          }}
+        />
+      )}
     </div>
   );
 };
