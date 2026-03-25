@@ -7,7 +7,7 @@ import HistoryLog from './components/HistoryLog';
 import LootInventory from './components/LootInventory';
 import CombatEncounterBuilder from './components/CombatEncounterBuilder';
 import { HeroUI } from '@heroui/react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Button } from '@heroui/react';
 
 const App = () => {
   // State for all modules
@@ -47,29 +47,64 @@ const App = () => {
     <HeroUI>
       <div className="app">
         <div className="sidebar">
-          <h1>D&D Manager</h1>
-          <nav>
-            <button onClick={() => setActiveTab('campaign')} className={activeTab === 'campaign' ? 'active' : ''}>
+          <h1 className="sidebar-title">D&D Manager</h1>
+          <nav className="sidebar-nav">
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'campaign' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('campaign')}
+            >
               Campaign
-            </button>
-            <button onClick={() => setActiveTab('sessions')} className={activeTab === 'sessions' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'sessions' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('sessions')}
+            >
               Sessions
-            </button>
-            <button onClick={() => setActiveTab('npcs')} className={activeTab === 'npcs' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'npcs' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('npcs')}
+            >
               NPCs
-            </button>
-            <button onClick={() => setActiveTab('characters')} className={activeTab === 'characters' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'characters' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('characters')}
+            >
               Characters
-            </button>
-            <button onClick={() => setActiveTab('combat')} className={activeTab === 'combat' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'combat' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('combat')}
+            >
               Combat & Encounters
-            </button>
-            <button onClick={() => setActiveTab('loot')} className={activeTab === 'loot' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'loot' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('loot')}
+            >
               Loot & Inventory
-            </button>
-            <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>
+            </Button>
+            <Button
+              fullWidth
+              size="md"
+              color={activeTab === 'history' ? 'primary' : 'default'}
+              onClick={() => setActiveTab('history')}
+            >
               History Log
-            </button>
+            </Button>
           </nav>
         </div>
 
