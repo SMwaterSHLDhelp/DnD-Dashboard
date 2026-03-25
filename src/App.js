@@ -29,35 +29,6 @@ function App() {
     loadFromLocalStorage();
   }, []);
 
-  const saveToLocalStorage = (key, data) => {
-    localStorage.setItem(key, JSON.stringify(data));
-  };
-
-  const handleCampaignSave = (campaign) => {
-    const updatedCampaigns = [...campaigns, campaign];
-    setCampaigns(updatedCampaigns);
-    saveToLocalStorage('dndCampaigns', updatedCampaigns);
-  };
-
-  const handleSessionSave = (session) => {
-    const updatedSessions = [...sessions, session];
-    setSessions(updatedSessions);
-    saveToLocalStorage('dndSessions', updatedSessions);
-  };
-
-  const handleNPCSave = (npc) => {
-    const updatedNpcs = [...npcs, npc];
-    setNpcs(updatedNpcs);
-    saveToLocalStorage('dndNPCs', updatedNpcs);
-  };
-
-  const handleCharacterSave = (character) => {
-    const updatedCharacters = [...characters, character];
-    setCharacters(updatedCharacters);
-    saveToLocalStorage('dndCharacters', updatedCharacters);
-  };
-
-  // Sidebar navigation
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'campaigns', label: 'Campaigns' },
@@ -65,88 +36,90 @@ function App() {
     { id: 'npcs', label: 'NPCs' },
     { id: 'characters', label: 'Characters' },
     { id: 'timeline', label: 'Timeline' },
-    { id: 'loot', label: 'Loot & Inventory' },
+    { id: 'loot', label: 'Loot & Inventory' }
   ];
 
   const renderView = () => {
     switch (view) {
       case 'dashboard':
         return (
-          <div className="dashboard">
-            <h2>Dashboard</h2>
+          <div className="dashboard-view">
+            <h2>Campaign Dashboard</h2>
             <p>Welcome to your D&D Campaign Manager</p>
-            <div className="stats">
-              <p>Campaigns: {campaigns.length}</p>
-              <p>Sessions: {sessions.length}</p>
-              <p>NPCs: {npcs.length}</p>
-              <p>Characters: {characters.length}</p>
+            <div className="stats-container">
+              <div className="stat-card">
+                <h3>Campaigns</h3>
+                <span className="stat-value">{campaigns.length}</span>
+              </div>
+              <div className="stat-card">
+                <h3>Sessions</h3>
+                <span className="stat-value">{sessions.length}</span>
+              </div>
+              <div className="stat-card">
+                <h3>NPCs</h3>
+                <span className="stat-value">{npcs.length}</span>
+              </div>
+              <div className="stat-card">
+                <h3>Characters</h3>
+                <span className="stat-value">{characters.length}</span>
+              </div>
             </div>
           </div>
         );
       case 'campaigns':
         return (
-          <div className="campaigns-container">
-            <h2>Campaigns</h2>
-            <CampaignList 
-              campaigns={campaigns} 
-              onEdit={() => console.log('Edit campaign')} 
-              onDelete={() => console.log('Delete campaign')} 
-              onSelect={(id) => console.log('Select campaign', id)}
-            />
+          <div className="campaigns-view">
+            <CampaignForm onCampaignAdd={(newCampaign) => {
+              setCampaigns([...campaigns, newCampaign]);
+              localStorage.setItem('dndCampaigns', JSON.stringify([...campaigns, newCampaign]));
+            }} />
+            <CampaignList campaigns={campaigns} />
           </div>
         );
       case 'sessions':
         return (
-          <div className="sessions-container">
-            <h2>Sessions</h2>
-            <SessionList 
-              sessions={sessions} 
-              onEdit={() => console.log('Edit session')} 
-              onDelete={() => console.log('Delete session')} 
-              onSelect={(id) => console.log('Select session', id)}
-            />
+          <div className="sessions-view">
+            <SessionForm onSessionAdd={(newSession) => {
+              setSessions([...sessions, newSession]);
+              localStorage.setItem('dndSessions', JSON.stringify([...sessions, newSession]));
+            }} />
+            <SessionList sessions={sessions} />
           </div>
         );
       case 'npcs':
         return (
-          <div className="npcs-container">
-            <h2>NPCs</h2>
-            <NPCList 
-              npcs={npcs} 
-              onEdit={() => console.log('Edit NPC')} 
-              onDelete={() => console.log('Delete NPC')} 
-              onSelect={(id) => console.log('Select NPC', id)}
-            />
+          <div className="npcs-view">
+            <NPCForm onNPCAdd={(newNPC) => {
+              setNpcs([...npcs, newNPC]);
+              localStorage.setItem('dndNPCs', JSON.stringify([...npcs, newNPC]));
+            }} />
+            <NPCList npcs={npcs} />
           </div>
         );
       case 'characters':
         return (
-          <div className="characters-container">
-            <h2>Characters</h2>
-            <CharacterList 
-              characters={characters} 
-              onEdit={() => console.log('Edit character')} 
-              onDelete={() => console.log('Delete character')} 
-              onSelect={(id) => console.log('Select character', id)}
-            />
+          <div className="characters-view">
+            <CharacterForm onCharacterAdd={(newCharacter) => {
+              setCharacters([...characters, newCharacter]);
+              localStorage.setItem('dndCharacters', JSON.stringify([...characters, newCharacter]));
+            }} />
+            <CharacterList characters={characters} />
           </div>
         );
       case 'timeline':
         return (
-          <div className="timeline-container">
-            <h2>Session Timeline</h2>
-            <SessionTimeline />
+          <div className="timeline-view">
+            <SessionTimeline sessions={sessions} />
           </div>
         );
       case 'loot':
         return (
-          <div className="loot-container">
-            <h2>Loot & Inventory</h2>
+          <div className="loot-view">
             <LootInventory />
           </div>
         );
       default:
-        return <div>Unknown view</div>;
+        return null;
     }
   };
 
