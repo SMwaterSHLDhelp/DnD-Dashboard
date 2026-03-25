@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HeroUIProvider, ThemeProvider, createTheme, Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Sidebar, SidebarItem, SidebarSection } from '@heroui/react';
+import { HeroUIProvider, createTheme, Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from '@heroui/react';
 import CampaignList from './components/CampaignList';
 import CampaignForm from './components/CampaignForm';
 import SessionList from './components/SessionList';
@@ -118,7 +118,7 @@ function App() {
     setEditingItem(null);
   };
 
-  // Sidebar navigation
+  // Sidebar navigation items
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'campaigns', label: 'Campaigns' },
@@ -298,45 +298,57 @@ function App() {
     }
   };
 
+  // Custom dark theme for D&D app
+  const customTheme = createTheme({
+    type: 'dark',
+    theme: {
+      colors: {
+        background: '#1a1a2e',
+        foreground: '#eaeaea',
+        primary: '#7c3aed',
+        secondary: '#06b6d4',
+      },
+    },
+  });
+
   return (
-    <HeroUIProvider>
-      <ThemeProvider>
-        <div className="app">
-          <Sidebar
-            position="left"
-            width="250px"
-            defaultSelectedKey="dashboard"
-            className="sidebar"
-          >
-            <SidebarSection>
-              {sidebarItems.map((item) => (
-                <SidebarItem
-                  key={item.id}
-                  text={item.label}
-                  isSelected={view === item.id}
-                  onClick={() => setView(item.id)}
-                />
-              ))}
-            </SidebarSection>
-          </Sidebar>
-          <div className="main-content">
-            <Navbar>
-              <NavbarBrand>
-                <h1>D&amp;D Campaign Manager</h1>
-              </NavbarBrand>
-              <NavbarContent>
-                <NavbarItem>
-                  <Link color="foreground">Login</Link>
-                </NavbarItem>
-              </NavbarContent>
-            </Navbar>
-            <div className="view-container">
-              {renderView()}
-            </div>
+    <HeroUIProvider theme={customTheme}>
+      <div className="app">
+        {/* Sidebar Navigation */}
+        <aside className="sidebar">
+          <div className="sidebar-header">
+            <h2>D&amp;D Manager</h2>
           </div>
-          {renderForm()}
+          <nav className="sidebar-nav">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                className={`nav-item ${view === item.id ? 'active' : ''}`}
+                onClick={() => setView(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+        </aside>
+        
+        <div className="main-content">
+          <Navbar>
+            <NavbarBrand>
+              <h1>D&amp;D Campaign Manager</h1>
+            </NavbarBrand>
+            <NavbarContent>
+              <NavbarItem>
+                <Link color="foreground">Login</Link>
+              </NavbarItem>
+            </NavbarContent>
+          </Navbar>
+          <div className="view-container">
+            {renderView()}
+          </div>
         </div>
-      </ThemeProvider>
+        {renderForm()}
+      </div>
     </HeroUIProvider>
   );
 }
