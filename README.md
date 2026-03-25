@@ -57,15 +57,16 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 The development server is accessible over the local network. Ensure your firewall allows traffic on port 3000.
 
 To expose the app to other devices on your LAN, verify:
-1. Your Linux machine's IP address (`ip addr show`)
+1. Your Linux
+```bash
+ip addr show
+```
 2. The app starts with `On Your Network: http://<your-ip>:3000`
 3. Other devices use that URL in their browser
 
 ⚠️ **Production deployment**: Use a reverse proxy (e.g., nginx) with HTTPS for secure multiplayer access.
 
 **Proxy Setup for 192.168.1.100**:
-
-To configure access from other devices on your network:
 
 ```bash
 # Check system firewall status
@@ -76,18 +77,6 @@ sudo ufw allow 3000/tcp
 
 # Get your LAN IP
 ip addr show
-
-# Alternative: Node.js proxy config for 192.168.1.100
-# Add to package.json proxy settings if using proxy
-```
-
-## Troubleshooting
-
-If you encounter integrity checksum failures:
-```bash
-rm -rf node_modules package-lock.json
-npm cache clean --force
-npm install
 ```
 
 ## License
