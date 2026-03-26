@@ -47,3 +47,6 @@ npm run start
 npm run dev
 npm run start
 ls
+npm run start
+npm run
+npm run dev
