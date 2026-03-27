@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@heroui/react": "^3.0.0",
-    "@heroui/styles": "^3.0.0"
+    "react-router-dom": "^6.22.0",
+    "@heroui/react": "^2.4.8",
+    "@heroui/styles": "^2.2.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",
