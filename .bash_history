@@ -50,3 +50,8 @@ ls
 npm run start
 npm run
 npm run dev
+git
+git add .
+git status
+git push
+npm run dev
