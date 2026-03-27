@@ -1,32 +1,30 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link } from '@heroui/react';
+import React from 'react';
+import { HeroUIProvider } from '@heroui/react';
+import CampaignForm from './components/CampaignForm';
+import CampaignList from './components/CampaignList';
+import SessionForm from './components/SessionForm';
+import HistoryLog from './components/HistoryLog';
+import Sidebar from './components/Sidebar';
 
-export default function App() {
+function App() {
   return (
-    <div className="min-h-screen bg-default-50">
-      <Navbar>
-        <NavbarBrand>
-          <p className="font-bold text-inherit">D&D Campaign Tracker</p>
-        </NavbarBrand>
-        <NavbarContent justify="end">
-          <NavbarItem>
-            <Button color="primary" variant="solid">Get Started</Button>
-          </NavbarItem>
-        </NavbarContent>
-      </Navbar>
-      <div className="p-8 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Welcome, Dungeon Master</h1>
-        <p className="text-lg mb-6">Build worlds, manage sessions, and track everything — all in one place.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-2">Campaign & World Building</h2>
-            <p>Store lore, maps, locations, factions, and history.</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-2">Session Management</h2>
-            <p>Plan sessions, track notes, and summarize outcomes.</p>
-          </div>
+    <HeroUIProvider>
+      <div className="app-container">
+        <Sidebar />
+        <div className="main-content">
+          <header className="app-header">
+            <h1>D&D Campaign Manager</h1>
+          </header>
+          <main className="app-main">
+            <CampaignList />
+            <CampaignForm />
+            <SessionForm />
+            <HistoryLog />
+          </main>
         </div>
       </div>
-    </div>
+    </HeroUIProvider>
   );
 }
+
+export default App;
