@@ -1,56 +1,110 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, Button, Navbar, NavbarBrand } from '@heroui/react';
-import TitleScreen from './screens/TitleScreen';
-import CampaignHome from './screens/CampaignHome';
-import CampaignBuilder from './screens/CampaignBuilder';
-import SessionManager from './screens/SessionManager';
-import NPCTracker from './screens/NPCTracker';
-import PlayerTracker from './screens/PlayerTracker';
-import CombatTools from './screens/CombatTools';
-import LootTracker from './screens/LootTracker';
-import RulesReference from './screens/RulesReference';
-import NotesAndSecrets from './screens/NotesAndSecrets';
-import Timeline from './screens/Timeline';
-import RandomGenerators from './screens/RandomGenerators';
+import { Route, Routes, Link } from 'react-router-dom';
+import { Navbar, Content } from '@heroui/react';
+
+function Home() {
+  return <div>Welcome to D&D Dashboard</div>;
+}
+
+function Campaign() {
+  return <div>Campaign Management</div>;
+}
+
+function Sessions() {
+  return <div>Session Management</div>;
+}
+
+function NPCs() {
+  return <div>NPC Tracker</div>;
+}
+
+function Players() {
+  return <div>Player Characters</div>;
+}
+
+function Combat() {
+  return <div>Combat & Encounter Tools</div>;
+}
+
+function Loot() {
+  return <div>Loot & Inventory</div>;
+}
+
+function Rules() {
+  return <div>Rules Reference</div>;
+}
+
+function Notes() {
+  return <div>Notes & Secrets</div>;
+}
+
+function Timeline() {
+  return <div>Timeline & History</div>;
+}
+
+function Generators() {
+  return <div>Random Generators</div>;
+}
 
 function App() {
   return (
-    <ThemeProvider
-      className="min-h-screen bg-gray-50 text-default-700"
-      theme={{
-        colors: {
-          primary: '#6366f1',
-          primaryLight: '#818cf8',
-          primaryDark: '#4f46e5',
-        },
-      }}
-    >
+    <div className="flex flex-col min-h-screen">
       <Navbar>
-        <NavbarBrand>
-          <span className="text-xl font-bold text-primary">D&D Campaign Manager</span>
-        </NavbarBrand>
+        <Navbar.Brand>
+          <span className="text-xl font-bold">D&D Dashboard</span>
+        </Navbar.Brand>
+        <Navbar.Content>
+          <Navbar.Link as={Link} to="/">
+            Home
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/campaign">
+            Campaign
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/sessions">
+            Sessions
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/npcs">
+            NPCs
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/players">
+            Players
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/combat">
+            Combat
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/loot">
+            Loot
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/rules">
+            Rules
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/notes">
+            Notes
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/timeline">
+            Timeline
+          </Navbar.Link>
+          <Navbar.Link as={Link} to="/generators">
+            Generators
+          </Navbar.Link>
+        </Navbar.Content>
       </Navbar>
-
-      <Routes>
-        {/* Title screen */}
-        <Route path="/" element={<TitleScreen />} />
-        {/* Main app routes */}
-        <Route path="/app" element={<CampaignHome />} />
-        <Route path="/app/campaign" element={<CampaignBuilder />} />
-        <Route path="/app/sessions" element={<SessionManager />} />
-        <Route path="/app/npcs" element={<NPCTracker />} />
-        <Route path="/app/players" element={<PlayerTracker />} />
-        <Route path="/app/combat" element={<CombatTools />} />
-        <Route path="/app/loot" element={<LootTracker />} />
-        <Route path="/app/rules" element={<RulesReference />} />
-        <Route path="/app/notes" element={<NotesAndSecrets />} />
-        <Route path="/app/timeline" element={<Timeline />} />
-        <Route path="/app/generators" element={<RandomGenerators />} />
-        {/* Default redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </ThemeProvider>
+      <Content>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/campaign" element={<Campaign />} />
+          <Route path="/sessions" element={<Sessions />} />
+          <Route path="/npcs" element={<NPCs />} />
+          <Route path="/players" element={<Players />} />
+          <Route path="/combat" element={<Combat />} />
+          <Route path="/loot" element={<Loot />} />
+          <Route path="/rules" element={<Rules />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/timeline" element={<Timeline />} />
+          <Route path="/generators" element={<Generators />} />
+        </Routes>
+      </Content>
+    </div>
   );
 }
 
