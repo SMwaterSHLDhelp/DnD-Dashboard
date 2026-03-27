@@ -1,57 +1,63 @@
-<page url="/docs/react/getting-started/agents-md">
-# AGENTS.md
+# D&D DM Tool - AI Agent Documentation
 
-**Category**: react
-**URL**: https://www.heroui.com/docs/react/getting-started/agents-md
-**Source**: https://raw.githubusercontent.com/heroui-inc/heroui/refs/heads/v3/apps/docs/content/docs/react/getting-started/(ui-for-agents)/agents-md.mdx
-> Download HeroUI v3 React documentation for AI coding agents
+## Project Overview
+D&D DM Tool is a React-based web application for Dungeon Masters to manage campaigns, characters, sessions, and NPCs. Built with React 18.3.1 and Vite for fast development.
 
+## Tech Stack
+- **Framework**: React 18.3.1
+- **Build Tool**: Vite 5.x
+- **UI Library**: HeroUI v3 (react, styles)
+- **Styling**: Custom CSS with utility classes
+- **State Management**: React useState, useEffect hooks
 
-Download HeroUI v3 React documentation directly into your project for AI assistants to reference.
-
-<Callout>
-  **Note:** The `agents-md` command is specifically for HeroUI React v3. Other CLI commands (like `add`, `init`, `upgrade`, etc.) are for HeroUI v2 (for now).
-</Callout>
-
-
-
-### Usage
-
-```bash
-npx heroui-cli@latest agents-md --react
-
+## Project Structure
+```
+src/
+├── App.jsx                 # Main app component
+├── components/             # Reusable components
+│   ├── CampaignForm.jsx
+│   ├── CampaignList.jsx
+│   ├── CharacterForm.jsx
+│   ├── CharacterList.jsx
+│   ├── CharacterInventory.jsx
+│   ├── HistoryLog.jsx
+│   ├── NPCForm.jsx
+│   ├── NPCList.jsx
+│   ├── SessionForm.jsx
+│   ├── SessionList.jsx
+│   ├── SessionPlanner.jsx
+│   ├── Timeline.jsx
+│   └── ui/                 # Shared UI components
+├── pages/                  # Page components
+│   ├── CampaignDashboard.jsx
+│   ├── CampaignManagerPage.jsx
+│   └── CharacterDashboard.jsx
+└── App.css                 # Global styles
 ```
 
-Or specify output file:
+## Key Features
+- Campaign & World Building (campaign creation, lore management)
+- Session Management (session planning, timeline tracking)
+- NPC Tracker (character management with status tracking)
+- Player & Character Tracking (character sheets, inventory)
+- Combat & Encounter Tools (combat management in SessionPlanner)
+- Timeline/History Log (session recording and continuity)
+- Local state management with no external state library
 
-```bash
-npx heroui-cli@latest agents-md --react --output AGENTS.md
+## Current Status
+The project has UI components built for all main features but is failing to start due to npm dependency integrity issues (EINTEGRITY errors with react-scripts and other packages). Known issues include:
+- npm install failing with EINTEGRITY errors
+- react-scripts dependency not resolving properly
+- May need to clear npm cache and reinstall dependencies
 
-```
+## Development Commands
+- `npm install` - Install dependencies (currently broken due to EINTEGRITY errors)
+- `npm run dev` - Start Vite dev server
+- `npm run build` - Build for production
 
-### What It Does
-
-* Downloads latest HeroUI v3 React docs to `.heroui-docs/react/`
-* Generates an index in `AGENTS.md` or `CLAUDE.md`
-* Includes demo files for code examples
-* Adds `.heroui-docs/` to `.gitignore` automatically
-
-### Options
-
-* `--react` - Download React docs only
-* `--output <files...>` - Target file(s) (e.g., `AGENTS.md` or `AGENTS.md CLAUDE.md`)
-* `--ssh` - Use SSH for git clone
-
-### Requirements
-
-* Tailwind CSS >= v4
-* React >= 19.0.0
-* `@heroui/react >= 3.0.0` or `@latest`
-
-### Related Documentation
-
-* [AGENTS.md](https://agents.md/) - Learn about the AGENTS.md format for coding agents
-* [CLAUDE.md](https://code.claude.com/docs/en/best-practices#write-an-effective-claude-md) - Claude equivalent of AGENTS.md
-* [AGENTS.md vs Skills](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals) - AGENTS.md performance
-
-</page>
+## Agent-Specific Notes
+- HeroUI components available via @heroui/react and @heroui/styles
+- Project uses local CSS files rather than CSS-in-JS solutions
+- All components follow React functional component patterns with hooks
+- Form components use controlled input patterns
+- Status indicators use color-coded badges (green/yellow/red for NPC status)
