@@ -55,3 +55,12 @@ git add .
 git status
 git push
 npm run dev
+npm run dev
+npm install
+npm run dev
+npm run
+npm run dev
+npm install
+ls
+npm run dev
+npm install
