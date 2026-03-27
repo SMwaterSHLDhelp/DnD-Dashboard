@@ -1,10 +1,13 @@
 import React from 'react';
 import LootTracker from './LootTracker';
+import { Card } from '@heroui/react';
 
 const LootInventory = () => {
   return (
     <div className="loot-inventory">
-      <LootTracker />
+      <Card className="loot-card">
+        <LootTracker />
+      </Card>
     </div>
   );
 };
