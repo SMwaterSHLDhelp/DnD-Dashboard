@@ -1,134 +1,79 @@
 import React, { useState, useEffect } from 'react';
 
-const CombatManager = ({ characters, npcs, monsters = [] }) => {
+const CombatManager = ({ characters = [], npcs = [], monsters = [] }) => {
+  const [combatants, setCombatants] = useState([]);
   const [initiativeOrder, setInitiativeOrder] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(0);
   const [conditions, setConditions] = useState({});
-  const [combatants, setCombatants] = useState([]);
+  const [activeTab, setActiveTab] = useState('combatants');
 
+  // Combine all combatants with initiative
   useEffect(() => {
-    const combined = [
+    const allCombatants = [
       ...characters.map(c => ({ ...c, type: 'character' })),
       ...npcs.map(n => ({ ...n, type: 'npc' })),
       ...monsters.map(m => ({ ...m, type: 'monster' }))
     ];
-    setCombatants(combined);
-    if (combined.length > 0 && initiativeOrder.length === 0) {
-      initializeCombat(combined);
-    }
+
+    const initiativeList = allCombatants
+      .map(c => ({ ...c, initiative: c.initiative || Math.floor(Math.random() * 20) + 1 }))
+      .sort((a, b) => b.initiative - a.initiative);
+
+    setInitiativeOrder(initiativeList);
   }, [characters, npcs, monsters]);
 
-  const initializeCombat = (combatants) => {
-    const withInitiative = combatants.map(c => ({
-      ...c,
-      initiative: c.initiative || Math.floor(Math.random() * 20) + 1
-    }));
-    const sorted = withInitiative.sort((a, b) => b.initiative - a.initiative);
-    setInitiativeOrder(sorted);
-  };
-
-  const nextTurn = () => {
-    setCurrentTurn(prev => (prev + 1) % initiativeOrder.length);
-  };
-
-  const previousTurn = () => {
-    setCurrentTurn(prev => (prev - 1 + initiativeOrder.length) % initiativeOrder.length);
-  };
-
-  const updateCondition = (entityId, condition) => {
+  const toggleCondition = (combatantId, condition) => {
     setConditions(prev => ({
       ...prev,
-      [entityId]: [...(prev[entityId] || []), condition]
+      [combatantId]: prev[combatantId]?.includes(condition)
+        ? prev[combatantId].filter(c => c !== condition)
+        : [...(prev[combatantId] || []), condition]
     }));
   };
 
-  const removeCondition = (entityId, conditionIndex) => {
-    setConditions(prev => ({
-      ...prev,
-      [entityId]: prev[entityId].filter((_, i) => i !== conditionIndex)
-    }));
+  const advanceTurn = () => {
+    setCurrentTurn((prev) => (prev + 1) % initiativeOrder.length);
   };
 
-  const getCurrentEntity = () => {
-    return initiativeOrder[currentTurn];
+  const resetCombat = () => {
+    setInitiativeOrder([]);
+    setCurrentTurn(0);
+    setConditions({});
   };
 
-  if (initiativeOrder.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-xl">Combat requires at least one combatant.</p>
-        <p className="text-gray-500">Add characters, NPCs, or monsters to begin.</p>
-      </div>
-    );
-  }
-
-  const entity = getCurrentEntity();
-  const entityConditions = conditions[entity.id] || [];
+  const combatant = initiativeOrder[currentTurn];
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
+    <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Combat Manager</h2>
         <button
-          onClick={previousTurn}
-          className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded"
+          onClick={resetCombat}
+          className="px-3 py-1 bg-red-500 text-white rounded text-sm"
         >
-          ← Previous
-        </button>
-        <h3 className="text-xl font-bold">
-          Turn: {currentTurn + 1} / {initiativeOrder.length}
-        </h3>
-        <button
-          onClick={nextTurn}
-          className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded"
-        >
-          Next →
+          Reset Combat
         </button>
       </div>
 
-      <div className="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg">
-        <h4 className="font-semibold text-lg">
-          {entity.type === 'character' ? 'Character' : entity.type === 'npc' ? 'NPC' : 'Monster'}: {entity.characterName || entity.name || 'Unknown'}
-        </h4>
-        <p className="text-sm text-gray-600 dark:text-gray-300">
-          Initiative: {entity.initiative}
-        </p>
-        
-        {entityConditions.length > 0 && (
-          <div className="mt-2">
-            <h5 className="font-medium">Conditions:</h5>
-            <ul className="list-disc list-inside">
-              {entityConditions.map((condition, index) => (
-                <li key={index} className="flex justify-between">
-                  <span>{condition}</span>
-                  <button
-                    onClick={() => removeCondition(entity.id, index)}
-                    className="text-red-500"
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="mb-4">
+        <button
+          onClick={advanceTurn}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+        >
+          Next Turn
+        </button>
+        {combatant && (
+          <span className="text-lg">
+            Current Turn: {combatant.name || combatant.characterName || 'Unknown'}
+          </span>
         )}
-
-        <div className="mt-2">
-          <select
-            className="px-2 py-1 border rounded dark:bg-gray-700 dark:border-gray-600"
-            onChange={(e) => updateCondition(entity.id, e.target.value)}
-            defaultValue=""
-          >
-            <option value="">Add Condition...</option>
-            <option value="Poisoned">Poisoned</option>
-            <option value="Stunned">Stunned</option>
-            <option value="Paralyzed">Paralyzed</option>
-            <option value="Frightened">Frightened</option>
-            <option value="Invisible">Invisible</option>
-            <option value="Blinded">Blinded</option>
-            <option value="Confused">Confused</option>
-          </select>
-        </div>
       </div>
+
+      {conditions[combatant?.id]?.length > 0 && (
+        <div className="mb-4 p-2 bg-red-100 dark:bg-red-900 rounded">
+          <strong>Conditions:</strong> {conditions[combatant.id].join(', ')}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {initiativeOrder.map((combatant, index) => (
@@ -141,14 +86,17 @@ const CombatManager = ({ characters, npcs, monsters = [] }) => {
             }`}
           >
             <div className="font-medium">
-              {combatant.type === 'character' ? 'Character' : combatant.type === 'npc' ? 'NPC' : 'Monster'}: {combatant.characterName || combatant.name || 'Unknown'}
+              {combatant.type === 'character' ? 'Character' : combatant.type === 'npc' ? 'NPC' : 'Monster'}: {combatant.name || 'Unknown'}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-300">
               Initiative: {combatant.initiative}
             </div>
+            {combatant.race && <div className="text-xs">Race: {combatant.race}</div>}
+            {combatant.class && <div className="text-xs">Class: {combatant.class}</div>}
+            {combatant.hp && <div className="text-xs">HP: {combatant.hp}</div>}
             {conditions[combatant.id]?.length > 0 && (
               <div className="text-sm text-red-500 mt-1">
-                {conditions[combatant.id].length} conditions
+                {conditions[combatant.id].join(', ')}
               </div>
             )}
           </div>
