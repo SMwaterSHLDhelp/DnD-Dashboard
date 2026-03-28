@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createTheme, ThemeProvider } from '@heroui/react';
-import App from './App';
+import App from './App.jsx';
 
 // Global styles import
 import '@heroui/styles/dist/reset.css';
