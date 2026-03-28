@@ -1,17 +1,7 @@
-import React, { useState } from 'react';
-import { Card, CardBody, CardHeader, CardFooter, Button, Divider } from '@heroui/react';
+import React from 'react';
+import { Card, CardBody, CardFooter, CardHeader, Button } from '@heroui/react';
 
-export const CampaignList = ({ campaigns, onEdit, onDelete, onSelect }) => {
-  const [selectedCampaign, setSelectedCampaign] = useState(null);
-
-  if (campaigns.length === 0) {
-    return (
-      <div className="empty-state">
-        <p>No campaigns found. <a href="#" onClick={(e) => e.preventDefault()}>Add your first campaign</a>.</p>
-      </div>
-    );
-  }
-
+function CampaignList({ campaigns, onSelect, onEdit, onDelete }) {
   return (
     <div className="campaign-list">
       {campaigns.map((campaign) => (
@@ -54,6 +44,6 @@ export const CampaignList = ({ campaigns, onEdit, onDelete, onSelect }) => {
       ))}
     </div>
   );
-};
+}
 
 export default CampaignList;
