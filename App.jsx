@@ -11,173 +11,325 @@ import SessionForm from './components/SessionForm.jsx';
 import NPCForm from './components/NPCForm.jsx';
 import CharacterForm from './components/CharacterForm.jsx';
 import CombatTracker from './components/CombatTracker.jsx';
-import HistoryLog from './components/HistoryLog.jsx';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('campaign');
-  const [campaigns, setCampaigns] = useState([
-    { id: 1, title: "The Shadow Over Innsmouth", description: "A horror campaign set in 1920s New England", status: "active" }
-  ]);
+  const [activeView, setActiveView] = useState('campaign');
+  const [campaigns, setCampaigns] = useState([]);
   const [sessions, setSessions] = useState([]);
-  const [npcs, setNPCs] = useState([
-    { id: 1, name: "Wizard of Yendor", role: "antagonist", status: "alive", notes: "Seeks the Eye of Agamotto" }
-  ]);
-  const [characters, setCharacters] = useState([
-    { id: 1, name: "Aelric Shadowwalker", class: "Rogue", level: 5, race: "Half-Elf", player: "Marcus" }
-  ]);
-  const [items, setItems] = useState([
-    { id: 1, name: "Dagger of Slicing", type: "weapon", rarity: "uncommon", notes: "+1 damage vs. giants" }
-  ]);
-  const [showForm, setShowForm] = useState(false);
-  const [formType, setFormType] = useState(null);
-  
-  // Handle adding a new campaign
-  const addCampaign = (campaign) => {
+  const [npcs, setNpcs] = useState([]);
+  const [characters, setCharacters] = useState([]);
+  const [loot, setLoot] = useState([]);
+  const [currentSession, setCurrentSession] = useState(null);
+  const [combatants, setCombatants] = useState([]);
+  const [combatTurn, setCombatTurn] = useState(0);
+  const [dmNotes, setDmNotes] = useState([]);
+  const [campaignId, setCampaignId] = useState(null);
+  const [showCampaignForm, setShowCampaignForm] = useState(false);
+  const [showSessionForm, setShowSessionForm] = useState(false);
+  const [showNpcForm, setShowNpcForm] = useState(false);
+  const [showCharacterForm, setShowCharacterForm] = useState(false);
+
+  const campaignList = campaigns.map(campaign => ({
+    id: campaign.id,
+    title: campaign.title,
+    description: campaign.description,
+    status: campaign.status,
+    date: campaign.date
+  }));
+
+  const sessionList = sessions.map(session => ({
+    id: session.id,
+    title: session.title,
+    campaignId: session.campaignId,
+    date: session.date,
+    status: session.status,
+    notes: session.notes
+  }));
+
+  const npcList = npcs.map(npc => ({
+    id: npc.id,
+    name: npc.name,
+    description: npc.description,
+    role: npc.role,
+    status: npc.status,
+    campaignId: npc.campaignId
+  }));
+
+  const characterList = characters.map(character => ({
+    id: character.id,
+    name: character.name,
+    class: character.class,
+    level: character.level,
+    race: character.race,
+    backstory: character.backstory,
+    player: character.player
+  }));
+
+  const lootList = loot.map(item => ({
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    quantity: item.quantity,
+    description: item.description,
+    campaignId: item.campaignId
+  }));
+
+  const handleAddCampaign = (campaign) => {
     setCampaigns([...campaigns, { ...campaign, id: Date.now() }]);
-    setShowForm(false);
+    setShowCampaignForm(false);
   };
-  
-  // Handle adding a new NPC
-  const addNPC = (npc) => {
-    setNPCs([...npcs, { ...npc, id: Date.now() }]);
-    setShowForm(false);
+
+  const handleAddSession = (session) => {
+    setSessions([...sessions, { ...session, id: Date.now() }]);
+    setShowSessionForm(false);
   };
-  
-  // Handle adding a new character
-  const addCharacter = (character) => {
+
+  const handleAddNpc = (npc) => {
+    setNpcs([...npcs, { ...npc, id: Date.now() }]);
+    setShowNpcForm(false);
+  };
+
+  const handleAddCharacter = (character) => {
     setCharacters([...characters, { ...character, id: Date.now() }]);
-    setShowForm(false);
+    setShowCharacterForm(false);
   };
-  
-  const openForm = (type) => {
-    setFormType(type);
-    setShowForm(true);
+
+  const handleViewChange = (view) => {
+    setActiveView(view);
   };
-  
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="flex h-screen flex-col">
       <Navbar>
         <NavbarContent>
           <NavbarItem>
-            <Link color="primary" href="#">
+            <Link color="foreground" href="#">
               D&D Campaign Manager
             </Link>
           </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
-            <Button as={Link} color="primary" variant="flat" onClick={() => openForm('campaign')}>
-              + Campaign
+            <Button
+              as={Link}
+              color="primary"
+              variant="flat"
+              onClick={() => setShowCampaignForm(true)}
+            >
+              Add Campaign
             </Button>
           </NavbarItem>
         </NavbarContent>
       </Navbar>
-      
-      {/* Sidebar Navigation */}
-      <div className="flex">
-        <div className="w-64 bg-gray-100 p-4">
-          <h3 className="font-semibold mb-2">Modules</h3>
-          <nav className="space-y-1">
-            <button
-              onClick={() => setActiveTab('campaign')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'campaign' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Campaign
-            </button>
-            <button
-              onClick={() => setActiveTab('sessions')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'sessions' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Sessions
-            </button>
-            <button
-              onClick={() => setActiveTab('npcs')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'npcs' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              NPCs
-            </button>
-            <button
-              onClick={() => setActiveTab('characters')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'characters' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Characters
-            </button>
-            <button
-              onClick={() => setActiveTab('combat')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'combat' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Combat
-            </button>
-            <button
-              onClick={() => setActiveTab('loot')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'loot' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Loot & Inventory
-            </button>
-            <button
-              onClick={() => setActiveTab('rules')}
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'rules' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-200'}`}
-            >
-              Rules Reference
-            </button>
-          </nav>
+
+      <div className="flex flex-1">
+        <div className="w-64 border-r border-gray-200 bg-white">
+          <div className="p-4">
+            <h2 className="text-lg font-bold">Navigation</h2>
+            <ul className="space-y-2">
+              <li>
+                <Button
+                  color={activeView === 'campaign' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('campaign')}
+                >
+                  Campaigns
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'sessions' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('sessions')}
+                >
+                  Sessions
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'npcs' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('npcs')}
+                >
+                  NPCs
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'characters' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('characters')}
+                >
+                  Characters
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'loot' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('loot')}
+                >
+                  Loot & Inventory
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'rules' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('rules')}
+                >
+                  Rules Reference
+                </Button>
+              </li>
+              <li>
+                <Button
+                  color={activeView === 'combat' ? 'primary' : 'default'}
+                  variant="flat"
+                  onClick={() => handleViewChange('combat')}
+                >
+                  Combat Tracker
+                </Button>
+              </li>
+            </ul>
+          </div>
         </div>
-        
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          {showForm && formType === 'campaign' && (
-            <CampaignForm onAddCampaign={addCampaign} onClose={() => setShowForm(false)} />
-          )}
-          {showForm && formType === 'npc' && (
-            <NPCForm onAddNPC={addNPC} onClose={() => setShowForm(false)} />
-          )}
-          {showForm && formType === 'character' && (
-            <CharacterForm onAddCharacter={addCharacter} onClose={() => setShowForm(false)} />
-          )}
-          
-          {activeTab === 'campaign' && <CampaignList campaigns={campaigns} />}
-          {activeTab === 'sessions' && (
+
+        <div className="flex-1 overflow-y-auto p-8">
+          {activeView === 'campaign' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Session Timeline</h2>
-              <SessionTimeline sessions={sessions} />
-              <Button className="mt-4" onClick={() => openForm('session')}>+ New Session</Button>
+              <div className="mb-4">
+                <Button
+                  color="primary"
+                  onClick={() => setShowCampaignForm(true)}
+                >
+                  Add Campaign
+                </Button>
+              </div>
+              <CampaignList campaigns={campaignList} onCampaignClick={(campaign) => {
+                setCampaignId(campaign.id);
+                setActiveView('campaign-details');
+              }} />
             </div>
           )}
-          {activeTab === 'npcs' && (
+
+          {activeView === 'campaign-details' && campaignId && (
+            <CampaignList campaigns={campaignList} campaignId={campaignId} />
+          )}
+
+          {activeView === 'sessions' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">NPCs</h2>
-              <NPCList npcs={npcs} />
-              <Button className="mt-4" onClick={() => openForm('npc')}>+ Add NPC</Button>
+              <div className="mb-4">
+                <Button
+                  color="primary"
+                  onClick={() => setShowSessionForm(true)}
+                >
+                  Add Session
+                </Button>
+              </div>
+              <SessionTimeline sessions={sessionList} />
             </div>
           )}
-          {activeTab === 'characters' && (
+
+          {activeView === 'npcs' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Characters</h2>
-              <CharacterList characters={characters} />
-              <Button className="mt-4" onClick={() => openForm('character')}>+ Add Character</Button>
+              <div className="mb-4">
+                <Button
+                  color="primary"
+                  onClick={() => setShowNpcForm(true)}
+                >
+                  Add NPC
+                </Button>
+              </div>
+              <NPCList npcs={npcList} />
             </div>
           )}
-          {activeTab === 'combat' && (
+
+          {activeView === 'characters' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Combat Tracker</h2>
-              <CombatTracker />
+              <div className="mb-4">
+                <Button
+                  color="primary"
+                  onClick={() => setShowCharacterForm(true)}
+                >
+                  Add Character
+                </Button>
+              </div>
+              <CharacterList characters={characterList} />
             </div>
           )}
-          {activeTab === 'loot' && (
+
+          {activeView === 'loot' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Loot & Inventory</h2>
-              <LootInventory items={items} />
+              <div className="mb-4">
+                <Button
+                  color="primary"
+                  onClick={() => setShowCharacterForm(true)}
+                >
+                  Add Loot
+                </Button>
+              </div>
+              <LootInventory loot={lootList} />
             </div>
           )}
-          {activeTab === 'rules' && (
+
+          {activeView === 'rules' && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Rules Reference</h2>
               <RulesReference />
+            </div>
+          )}
+
+          {activeView === 'combat' && (
+            <div>
+              <CombatTracker combatants={combatants} turn={combatTurn} />
+              <Button
+                className="mt-4"
+                color="primary"
+                onClick={() => {
+                  const newCombatant = {
+                    id: Date.now(),
+                    name: 'Goblin',
+                    initiative: Math.floor(Math.random() * 20) + 1,
+                    hp: 7,
+                    maxHp: 7,
+                    status: []
+                  };
+                  setCombatants([...combatants, newCombatant]);
+                }}
+              >
+                Add Combatant
+              </Button>
             </div>
           )}
         </div>
       </div>
+
+      {showCampaignForm && (
+        <CampaignForm
+          onSubmit={handleAddCampaign}
+          onClose={() => setShowCampaignForm(false)}
+        />
+      )}
+
+      {showSessionForm && (
+        <SessionForm
+          onSubmit={handleAddSession}
+          onClose={() => setShowSessionForm(false)}
+        />
+      )}
+
+      {showNpcForm && (
+        <NPCForm
+          onSubmit={handleAddNpc}
+          onClose={() => setShowNpcForm(false)}
+        />
+      )}
+
+      {showCharacterForm && (
+        <CharacterForm
+          onSubmit={handleAddCharacter}
+          onClose={() => setShowCharacterForm(false)}
+        />
+      )}
     </div>
   );
 }
