@@ -11,8 +11,8 @@
   "dependencies": {
     "@heroui/react": "^3.0.0",
     "@heroui/styles": "^3.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-router-dom": "^6.20.0"
   },
   "devDependencies": {
