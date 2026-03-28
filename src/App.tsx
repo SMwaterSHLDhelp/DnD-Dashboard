@@ -1,10 +1,9 @@
-import React from 'react';
 import { HeroUIProvider } from '@heroui/react';
-import CampaignForm from './components/CampaignForm';
-import CampaignList from './components/CampaignList';
-import SessionForm from './components/SessionForm';
-import HistoryLog from './components/HistoryLog';
-import Sidebar from './components/Sidebar';
+import CampaignForm from './components/CampaignForm.jsx';
+import CampaignList from './components/CampaignList.jsx';
+import SessionForm from './components/SessionForm.jsx';
+import HistoryLog from './components/HistoryLog.jsx';
+import Sidebar from './components/Sidebar.tsx';
 
 function App() {
   return (
