@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Textarea, Card, CardBody, CardFooter, CardHeader, Tabs, Tab, Spacer } from '@heroui/react';
+import { Button, Input, Textarea, Card, CardBody, CardHeader, Tabs, Tab } from '@heroui/react';
 import { Eye, EyeOff, Plus, Trash, Tag } from 'lucide-react';
 
 function DMNotes() {
@@ -14,7 +14,6 @@ function DMNotes() {
     campaignId: null
   });
 
-  // Load notes from localStorage on mount
   useEffect(() => {
     const savedNotes = localStorage.getItem('dmNotes');
     if (savedNotes) {
@@ -22,7 +21,6 @@ function DMNotes() {
     }
   }, []);
 
-  // Save notes to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('dmNotes', JSON.stringify(notes));
   }, [notes]);
@@ -96,78 +94,63 @@ function DMNotes() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Note Form */}
-        <div>
-          <Card className="mb-6">
-            <CardHeader>
-              <h3 className="font-bold">New Note</h3>
-            </CardHeader>
-            <CardBody>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                  label="Title"
-                  value={formData.title}
-                  onChange={(e) => handleInputChange('title', e.target.value)}
-                  placeholder="Note title"
-                  isRequired
+      {/* Note Creation Form */}
+      <Card className="mb-6">
+        <CardHeader>
+          <h3 className="font-bold">Add New Note</h3>
+        </CardHeader>
+        <CardBody>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Title"
+              value={formData.title}
+              onChange={(e) => handleInputChange('title', e.target.value)}
+              placeholder="Note title..."
+              required
+            />
+            <Textarea
+              label="Content"
+              value={formData.content}
+              onChange={(e) => handleInputChange('content', e.target.value)}
+              placeholder="Note content..."
+              required
+            />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm mb-1">Type</label>
+                <select
+                  value={formData.type}
+                  onChange={(e) => handleInputChange('type', e.target.value)}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="general">General</option>
+                  <option value="plot">Plot Thread</option>
+                  <option value="mystery">Mystery</option>
+                  <option value="character">Character Secret</option>
+                </select>
+              </div>
+              <div className="flex items-center pt-6">
+                <input
+                  type="checkbox"
+                  id="secret"
+                  checked={formData.secret}
+                  onChange={(e) => handleInputChange('secret', e.target.checked)}
+                  className="w-5 h-5"
                 />
+                <label htmlFor="secret" className="ml-2">Secret Note</label>
+              </div>
+            </div>
+            <Button type="submit" color="primary" className="w-full">
+              <Plus size={18} className="mr-1" />
+              Add Note
+            </Button>
+          </form>
+        </CardBody>
+      </Card>
 
-                <Textarea
-                  label="Content"
-                  value={formData.content}
-                  onChange={(e) => handleInputChange('content', e.target.value)}
-                  placeholder="Write your note here..."
-                  isRequired
-                  minRows={6}
-                />
-
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium mb-1">Type</label>
-                    <select
-                      value={formData.type}
-                      onChange={(e) => handleInputChange('type', e.target.value)}
-                      className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                    >
-                      <option value="general">General</option>
-                      <option value="plot">Plot Thread</option>
-                      <option value="secret">Secret</option>
-                      <option value="mystery">Mystery Solution</option>
-                      <option value="character">Character Secret</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center h-[50px]">
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={formData.secret}
-                        onChange={(e) => handleInputChange('secret', e.target.checked)}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-sm">Secret Note</span>
-                    </label>
-                  </div>
-                </div>
-
-                <Input
-                  label="Campaign ID (optional)"
-                  type="number"
-                  value={formData.campaignId}
-                  onChange={(e) => handleInputChange('campaignId', parseInt(e.target.value) || null)}
-                  placeholder="Link to campaign ID"
-                />
-
-                <Button color="primary" type="submit" className="w-full">
-                  <Plus size={18} className="mr-1" />
-                  Add Note
-                </Button>
-              </form>
-            </CardBody>
-          </Card>
-
-          {/* Filters */}
+      <div className="flex gap-6">
+        {/* Filter Sidebar */}
+        <div className="w-64 flex-shrink-0">
           <Card>
             <CardHeader>
               <h3 className="font-bold">Filter Notes</h3>
@@ -209,7 +192,7 @@ function DMNotes() {
         </div>
 
         {/* Notes List */}
-        <div>
+        <div className="flex-1">
           <div className="space-y-4">
             {filteredNotes.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
