@@ -1,4 +1,4 @@
-import { HeroUIProvider } from '@heroui/react';
+import { ThemeProvider } from '@heroui/react';
 import CampaignForm from './components/CampaignForm.jsx';
 import CampaignList from './components/CampaignList.jsx';
 import SessionForm from './components/SessionForm.jsx';
@@ -7,7 +7,7 @@ import Sidebar from './components/Sidebar.tsx';
 
 function App() {
   return (
-    <HeroUIProvider>
+    <ThemeProvider>
       <div className="app-container">
         <Sidebar />
         <div className="main-content">
@@ -22,7 +22,7 @@ function App() {
           </main>
         </div>
       </div>
-    </HeroUIProvider>
+    </ThemeProvider>
   );
 }
 
