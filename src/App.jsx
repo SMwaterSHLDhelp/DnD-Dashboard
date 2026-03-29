@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from '@heroui/react';
-import { House, BookOpen, Users, Map, Calendar, Gamepad2, Gift, FileText, History, Dice5 } from 'lucide-react';
-import CampaignManager from './components/CampaignManager';
-import SessionManager from './components/SessionManager';
-import NPCManager from './components/NPCManager';
-import PlayerManager from './components/PlayerManager';
-import CombatManager from './components/CombatManager';
-import LootInventory from './components/LootInventory';
-import RulesReference from './components/RulesReference';
-import HistoryLog from './components/HistoryLog';
-import RandomGenerators from './components/RandomGenerators';
-import DMNotes from './components/DMNotes';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Card, CardBody } from '@heroui/react';
+import { House, BookOpen, Users, Calendar, Gamepad2, Gift, FileText, History, Dice5, Sword } from 'lucide-react';
+
+// Placeholder components
+const CampaignManager = () => <Card><CardBody><h1 className="text-2xl font-bold">Campaign Manager</h1><p>Manage your campaigns here</p></CardBody></Card>;
+const SessionManager = () => <Card><CardBody><h1 className="text-2xl font-bold">Session Manager</h1><p>Manage your sessions here</p></CardBody></Card>;
+const NPCManager = () => <Card><CardBody><h1 className="text-2xl font-bold">NPC Manager</h1><p>Manage your NPCs here</p></CardBody></Card>;
+const PlayerManager = () => <Card><CardBody><h1 className="text-2xl font-bold">Player Manager</h1><p>Manage your players here</p></CardBody></Card>;
+const CombatManager = () => <Card><CardBody><h1 className="text-2xl font-bold">Combat Manager</h1><p>Manage combat encounters here</p></CardBody></Card>;
+const LootInventory = () => <Card><CardBody><h1 className="text-2xl font-bold">Loot Inventory</h1><p>Track your loot here</p></CardBody></Card>;
+const RulesReference = () => <Card><CardBody><h1 className="text-2xl font-bold">Rules Reference</h1><p>Reference rules and mechanics</p></CardBody></Card>;
+const HistoryLog = () => <Card><CardBody><h1 className="text-2xl font-bold">History Log</h1><p>Track timeline and history</p></CardBody></Card>;
+const RandomGenerators = () => <Card><CardBody><h1 className="text-2xl font-bold">Random Generators</h1><p>Generate random content</p></CardBody></Card>;
+const DMNotes = () => <Card><CardBody><h1 className="text-2xl font-bold">DM Notes</h1><p>Personal notes for the DM</p></CardBody></Card>;
 
 function App() {
   const [activeView, setActiveView] = useState('campaign');
@@ -79,9 +81,6 @@ function App() {
           </NavbarContent>
         </Navbar>
         <div className="p-4">
-          <Routes>
-            <Route path="/" element={<App />} />
-          </Routes>
           {renderView()}
         </div>
       </div>
