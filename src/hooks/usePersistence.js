@@ -19,7 +19,9 @@ export function usePersistence(key, initialValue, options = {}) {
       }
       return typeof initialValue === 'function' ? initialValue() : initialValue;
     } catch (error) {
-      console.error(`Error loading ${key} from storage:`, error);
+      const message = `Error loading ${key} from storage: ${error.message}`;
+      console.error(message);
+      alert(message);
       return typeof initialValue === 'function' ? initialValue() : initialValue;
     }
   });
@@ -31,14 +33,22 @@ export function usePersistence(key, initialValue, options = {}) {
       setData(valueToStore);
       localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      console.error(`Error saving ${key} to storage:`, error);
+      const message = `Error saving ${key} to storage: ${error.message}`;
+      console.error(message);
+      alert(message);
     }
   }, [key, data]);
 
   // Debounced auto-save
   useEffect(() => {
     const timer = setTimeout(() => {
-      localStorage.setItem(key, JSON.stringify(data));
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (error) {
+        const message = `Auto-save failed for ${key}: ${error.message}`;
+        console.error(message);
+        alert(message);
+      }
     }, debounceDelay);
 
     return () => clearTimeout(timer);
@@ -52,14 +62,22 @@ export function usePersistence(key, initialValue, options = {}) {
         setData(JSON.parse(saved));
       }
     } catch (error) {
-      console.error(`Error loading ${key} from localStorage:`, error);
+      const message = `Error loading ${key} from localStorage: ${error.message}`;
+      console.error(message);
+      alert(message);
     }
   }, [key]);
 
   // Clear data
   const clearData = useCallback(() => {
-    localStorage.removeItem(key);
-    setData(typeof initialValue === 'function' ? initialValue() : initialValue);
+    try {
+      localStorage.removeItem(key);
+      setData(typeof initialValue === 'function' ? initialValue() : initialValue);
+    } catch (error) {
+      const message = `Error clearing ${key}: ${error.message}`;
+      console.error(message);
+      alert(message);
+    }
   }, [key, initialValue]);
 
   return [data, saveData, clearData];
