@@ -1,98 +1,130 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Input, Select, SelectItem, Button, Card, CardBody, CardFooter } from '@heroui/react';
+import { Plus } from 'lucide-react';
 
-const CharacterForm = ({ onSave, initialData = {} }) => {
-  const [formData, setFormData] = useState({
-    name: initialData.name || '',
-    race: initialData.race || '',
-    class: initialData.class || '',
-    level: initialData.level || 1,
-    hp: initialData.hp || 10,
-    ac: initialData.ac || 10,
-    backstory: initialData.backstory || ''
+function CharacterForm({ onSubmit, onCancel }) {
+  const [formData, setFormData] = React.useState({
+    name: '',
+    player: '',
+    race: '',
+    class: '',
+    level: '1',
+    hp: '',
+    ac: '',
+    notes: ''
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const races = ['Human', 'Elf', 'Dwarf', 'Halfling', 'Dragonborn', 'Gnome', 'Tiefling', 'Half-Elf', 'Half-Orc'];
+  const classes = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    onSubmit({
+      ...formData,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+    setFormData({
+      name: '',
+      player: '',
+      race: '',
+      class: '',
+      level: '1',
+      hp: '',
+      ac: '',
+      notes: ''
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Character Sheet</h2>
-      <div className="grid grid-cols-2 gap-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Character Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-        <input
-          type="text"
-          name="race"
-          placeholder="Race"
-          value={formData.race}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-        <input
-          type="text"
-          name="class"
-          placeholder="Class"
-          value={formData.class}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-        <input
-          type="number"
-          name="level"
-          placeholder="Level"
-          value={formData.level}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-        <input
-          type="number"
-          name="hp"
-          placeholder="Hit Points"
-          value={formData.hp}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-        <input
-          type="number"
-          name="ac"
-          placeholder="Armor Class"
-          value={formData.ac}
-          onChange={handleChange}
-          className="p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-      </div>
-      <textarea
-        name="backstory"
-        placeholder="Backstory"
-        value={formData.backstory}
-        onChange={handleChange}
-        className="mt-4 p-2 w-full border rounded dark:bg-gray-700 dark:border-gray-600"
-        rows={3}
-      />
-      <button
-        type="submit"
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Save Character
-      </button>
-    </form>
+    <Card className="mb-4">
+      <CardBody>
+        <form onSubmit={handleSubmit}>
+          <Input
+            label="Character Name"
+            placeholder="Enter character name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="mb-3"
+            isRequired
+          />
+          <Input
+            label="Player"
+            placeholder="Enter player name"
+            value={formData.player}
+            onChange={(e) => setFormData({ ...formData, player: e.target.value })}
+            className="mb-3"
+            isRequired
+          />
+          <Select
+            label="Race"
+            placeholder="Select a race"
+            className="mb-3"
+            value={formData.race}
+            onChange={(e) => setFormData({ ...formData, race: e.target.value })}
+          >
+            {races.map((race) => (
+              <SelectItem key={race} value={race}>
+                {race}
+              </SelectItem>
+            ))}
+          </Select>
+          <Select
+            label="Class"
+            placeholder="Select a class"
+            className="mb-3"
+            value={formData.class}
+            onChange={(e) => setFormData({ ...formData, class: e.target.value })}
+          >
+            {classes.map((cls) => (
+              <SelectItem key={cls} value={cls}>
+                {cls}
+              </SelectItem>
+            ))}
+          </Select>
+          <div className="flex gap-3">
+            <Input
+              label="Level"
+              type="number"
+              min="1"
+              max="20"
+              value={formData.level}
+              onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+              className="mb-3 w-1/2"
+            />
+            <Input
+              label="HP"
+              type="number"
+              min="1"
+              value={formData.hp}
+              onChange={(e) => setFormData({ ...formData, hp: e.target.value })}
+              className="mb-3 w-1/2"
+            />
+          </div>
+          <div className="flex gap-3">
+            <Input
+              label="AC"
+              type="number"
+              min="10"
+              value={formData.ac}
+              onChange={(e) => setFormData({ ...formData, ac: e.target.value })}
+              className="mb-3 w-1/2"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button type="button" onClick={onCancel} color="default">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              <Plus size={16} className="mr-1" />
+              Add Character
+            </Button>
+          </div>
+        </form>
+      </CardBody>
+    </Card>
   );
-};
+}
 
 export default CharacterForm;
