@@ -1,185 +1,106 @@
 import React, { useState } from 'react';
-import { Navbar, Sidebar, Layout, Text } from '@heroui/react';
-import CampaignForm from './components/CampaignForm.jsx';
-import CampaignList from './components/CampaignList.jsx';
-import CharacterForm from './components/CharacterForm.jsx';
-import CharacterList from './components/CharacterList.jsx';
-import CharacterInventory from './components/CharacterInventory.jsx';
-import NPCForm from './components/NPCForm.jsx';
-import NPCList from './components/NPCList.jsx';
-import HistoryLog from './components/HistoryLog.jsx';
-import SessionTimeline from './components/SessionTimeline.jsx';
-import LootInventory from './components/LootInventory.jsx';
-import RulesReference from './components/RulesReference.jsx';
-import CombatEncounter from './components/CombatEncounter.jsx';
-import CampaignWorld from './components/CampaignWorld.jsx';
-import DmNotes from './components/DmNotes.jsx';
-import RandomGenerators from './components/RandomGenerators.jsx';
+import { Navbar, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarBrand, NavbarItem, Button, Link } from '@heroui/react';
+import { Menu, Book, Calendar, User, Sword, Gift, BookOpen, FileText, Shuffle, Info } from 'lucide-react';
+import Campaign from './pages/Campaign';
+import Session from './pages/Session';
+import NPC from './pages/NPC';
+import Character from './pages/Character';
+import Combat from './pages/Combat';
+import Loot from './pages/Loot';
+import RulesReference from './pages/RulesReference';
+import DMNotes from './pages/DMNotes';
+import Timeline from './pages/Timeline';
+import RandomGenerators from './pages/RandomGenerators';
 
-const App = () => {
+function App() {
   const [activeTab, setActiveTab] = useState('campaign');
-  const [campaigns, setCampaigns] = useState([]);
-  const [characters, setCharacters] = useState([]);
-  const [npcs, setNpcs] = useState([]);
-  const [sessions, setSessions] = useState([]);
-  const [loot, setLoot] = useState([]);
-  const [campaignData, setCampaignData] = useState({
-    title: '',
-    description: '',
-    world Lore: '',
-    factions: [],
-    history: ''
-  });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  const menuItems = [
+    { id: 'campaign', label: 'Campaign', icon: Book },
+    { id: 'session', label: 'Sessions', icon: Calendar },
+    { id: 'npc', label: 'NPCs', icon: User },
+    { id: 'character', label: 'Characters', icon: User },
+    { id: 'combat', label: 'Combat', icon: Sword },
+    { id: 'loot', label: 'Loot', icon: Gift },
+    { id: 'rules', label: 'Rules', icon: BookOpen },
+    { id: 'notes', label: 'Notes', icon: FileText },
+    { id: 'timeline', label: 'Timeline', icon: Shuffle },
+    { id: 'generators', label: 'Generators', icon: Info }
+  ];
 
-  const handleSaveCampaign = (campaign) => {
-    setCampaigns([...campaigns, campaign]);
-  };
-
-  const handleSaveCharacter = (character) => {
-    setCharacters([...characters, character]);
-  };
-
-  const handleSaveNPC = (npc) => {
-    setNpcs([...npcs, npc]);
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'campaign':
+        return <Campaign />;
+      case 'session':
+        return <Session />;
+      case 'npc':
+        return <NPC />;
+      case 'character':
+        return <Character />;
+      case 'combat':
+        return <Combat />;
+      case 'loot':
+        return <Loot />;
+      case 'rules':
+        return <RulesReference />;
+      case 'notes':
+        return <DMNotes />;
+      case 'timeline':
+        return <Timeline />;
+      case 'generators':
+        return <RandomGenerators />;
+      default:
+        return <Campaign />;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <Navbar />
-      <Layout>
-        <Sidebar />
-        <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6">D&D Campaign Manager</h1>
-          
-          <div className="mb-6">
-            <button 
-              onClick={() => setActiveTab('campaign')}
-              className="px-4 py-2 mr-2 bg-blue-600 rounded"
-            >
-              Campaign
-            </button>
-            <button 
-              onClick={() => setActiveTab('characters')}
-              className="px-4 py-2 mr-2 bg-green-600 rounded"
-            >
-              Characters
-            </button>
-            <button 
-              onClick={() => setActiveTab('npcs')}
-              className="px-4 py-2 mr-2 bg-purple-600 rounded"
-            >
-              NPCs
-            </button>
-            <button 
-              onClick={() => setActiveTab('sessions')}
-              className="px-4 py-2 mr-2 bg-yellow-600 rounded"
-            >
-              Sessions
-            </button>
-            <button 
-              onClick={() => setActiveTab('loot')}
-              className="px-4 py-2 mr-2 bg-orange-600 rounded"
-            >
-              Loot
-            </button>
-            <button 
-              onClick={() => setActiveTab('rules')}
-              className="px-4 py-2 mr-2 bg-indigo-600 rounded"
-            >
-              Rules
-            </button>
-            <button 
-              onClick={() => setActiveTab('combat')}
-              className="px-4 py-2 mr-2 bg-red-600 rounded"
-            >
-              Combat
-            </button>
-            <button 
-              onClick={() => setActiveTab('world')}
-              className="px-4 py-2 mr-2 bg-teal-600 rounded"
-            >
-              World
-            </button>
-            <button 
-              onClick={() => setActiveTab('notes')}
-              className="px-4 py-2 mr-2 bg-gray-600 rounded"
-            >
-              DM Notes
-            </button>
-            <button 
-              onClick={() => setActiveTab('generators')}
-              className="px-4 py-2 bg-pink-600 rounded"
-            >
-              Generators
-            </button>
-          </div>
-
-          {activeTab === 'campaign' && (
-            <div>
-              <CampaignForm onSave={handleSaveCampaign} />
-              <CampaignList campaigns={campaigns} />
+    <div className="flex flex-col min-h-screen">
+      <Navbar onMenuOpenChange={setIsMenuOpen} isBordered>
+        <NavbarContent>
+          <NavbarBrand>
+            <div className="flex items-center gap-2">
+              <Menu size={24} />
+              <span className="font-bold text-inherit">D&D DM Tool</span>
             </div>
-          )}
+          </NavbarBrand>
+        </NavbarContent>
 
-          {activeTab === 'characters' && (
-            <div>
-              <CharacterForm onSave={handleSaveCharacter} />
-              <CharacterList characters={characters} />
-            </div>
-          )}
+        <NavbarContent justify="end">
+          <NavbarItem>
+            <Link isExternal href="https://github.com/yourusername/dnd-dm-tool" color="primary">
+              GitHub
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
 
-          {activeTab === 'npcs' && (
-            <div>
-              <NPCForm onSave={handleSaveNPC} />
-              <NPCList npcs={npcs} />
-            </div>
-          )}
+        <NavbarMenu>
+          {menuItems.map((item) => (
+            <NavbarMenuItem key={item.id}>
+              <Button 
+                variant={activeTab === item.id ? "solid" : "ghost"}
+                color={activeTab === item.id ? "primary" : "default"}
+                startContent={<item.icon size={16} />} 
+                fullWidth
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsMenuOpen(false);
+                }}
+              >
+                {item.label}
+              </Button>
+            </NavbarMenuItem>
+          ))}
+        </NavbarMenu>
+      </Navbar>
 
-          {activeTab === 'sessions' && (
-            <div>
-              <SessionTimeline />
-            </div>
-          )}
-
-          {activeTab === 'loot' && (
-            <div>
-              <LootInventory />
-            </div>
-          )}
-
-          {activeTab === 'rules' && (
-            <div>
-              <RulesReference />
-            </div>
-          )}
-
-          {activeTab === 'combat' && (
-            <div>
-              <CombatEncounter />
-            </div>
-          )}
-
-          {activeTab === 'world' && (
-            <div>
-              <CampaignWorld />
-            </div>
-          )}
-
-          {activeTab === 'notes' && (
-            <div>
-              <DmNotes />
-            </div>
-          )}
-
-          {activeTab === 'generators' && (
-            <div>
-              <RandomGenerators />
-            </div>
-          )}
-        </div>
-      </Layout>
+      <main className="flex-1">
+        {renderContent()}
+      </main>
     </div>
   );
-};
+}
 
 export default App;

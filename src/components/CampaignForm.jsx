@@ -1,24 +1,31 @@
-import React from 'react';
-import { Input, Textarea, Button, Card, CardBody, CardFooter } from '@heroui/react';
+import React, { useState, useEffect } from 'react';
+import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
 import { Plus } from 'lucide-react';
 
-function CampaignForm({ onSubmit, onCancel }) {
-  const [formData, setFormData] = React.useState({
+function CampaignForm({ initialData, onSave, onCancel }) {
+  const [formData, setFormData] = useState({
     title: '',
     description: '',
-    setting: '',
-    campaignType: 'D&D 5e'
+    setting: ''
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        setting: initialData.setting || ''
+      });
+    }
+  }, [initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
-      ...formData,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
-    setFormData({ title: '', description: '', setting: '', campaignType: 'D&D 5e' });
+    onSave(formData);
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   return (
@@ -29,7 +36,7 @@ function CampaignForm({ onSubmit, onCancel }) {
             label="Campaign Title"
             placeholder="Enter campaign name"
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) => handleInputChange('title', e.target.value)}
             className="mb-3"
             isRequired
           />
@@ -37,14 +44,14 @@ function CampaignForm({ onSubmit, onCancel }) {
             label="Setting"
             placeholder="World or campaign setting"
             value={formData.setting}
-            onChange={(e) => setFormData({ ...formData, setting: e.target.value })}
+            onChange={(e) => handleInputChange('setting', e.target.value)}
             className="mb-3"
           />
           <Textarea
             label="Description"
             placeholder="Campaign overview, main plot points, etc."
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) => handleInputChange('description', e.target.value)}
             className="mb-3"
             minRows={3}
           />
@@ -54,7 +61,7 @@ function CampaignForm({ onSubmit, onCancel }) {
             </Button>
             <Button type="submit" color="primary">
               <Plus size={16} className="mr-1" />
-              Add Campaign
+              {initialData ? 'Update Campaign' : 'Add Campaign'}
             </Button>
           </div>
         </form>

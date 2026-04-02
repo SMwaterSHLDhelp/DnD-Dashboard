@@ -1,107 +1,115 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Card, CardBody, CardFooter, CardHeader, Spacer, Textarea } from '@heroui/react';
 import CampaignList from '../components/CampaignList';
 import CampaignForm from '../components/CampaignForm';
+import CampaignExportImport from '../components/CampaignExportImport';
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    setting: ''
+  });
 
+  // Load campaigns from localStorage
   useEffect(() => {
-    // Load campaigns from localStorage
-    const savedCampaigns = localStorage.getItem('campaigns');
+    const savedCampaigns = localStorage.getItem('campaignData');
     if (savedCampaigns) {
-      setCampaigns(JSON.parse(savedCampaigns));
+      try {
+        const data = JSON.parse(savedCampaigns);
+        if (data.campaigns && Array.isArray(data.campaigns)) {
+          setCampaigns(data.campaigns);
+        }
+      } catch (e) {
+        console.error('Failed to parse campaign data:', e);
+        setCampaigns([]);
+      }
     }
   }, []);
 
-  const saveCampaigns = (campaignsToSave) => {
-    setCampaigns(campaignsToSave);
-    localStorage.setItem('campaigns', JSON.stringify(campaignsToSave));
-  };
+  // Save campaigns to localStorage whenever they change
+  useEffect(() => {
+    const data = { campaigns };
+    localStorage.setItem('campaignData', JSON.stringify(data));
+  }, [campaigns]);
+
+  // Update campaign export data
+  const campaignData = { campaigns };
 
   const handleAddCampaign = (campaign) => {
     const newCampaign = {
+      id: Date.now(),
       ...campaign,
-      id: Date.now().toString(),
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      worldLore: [],
-      locations: [],
-      factions: [],
-      history: [],
-      maps: [],
-      sessions: []
+      updatedAt: new Date().toISOString()
     };
-    saveCampaigns([...campaigns, newCampaign]);
-    setSelectedCampaign(newCampaign);
-    setIsEditing(true);
-  };
-
-  const handleEditCampaign = (campaign) => {
-    setSelectedCampaign(campaign);
-    setIsEditing(true);
+    setCampaigns([...campaigns, newCampaign]);
+    setIsEditing(false);
+    setFormData({ title: '', description: '', setting: '' });
   };
 
   const handleUpdateCampaign = (updatedCampaign) => {
-    const updatedCampaigns = campaigns.map((c) =>
-      c.id === updatedCampaign.id
-        ? { ...updatedCampaign, updatedAt: new Date().toISOString() }
-        : c
-    );
-    saveCampaigns(updatedCampaigns);
+    setCampaigns(campaigns.map(c => 
+      c.id === updatedCampaign.id ? { ...updatedCampaign, updatedAt: new Date().toISOString() } : c
+    ));
     setIsEditing(false);
+    setFormData({ title: '', description: '', setting: '' });
   };
 
-  const handleDeleteCampaign = (campaign) => {
-    const updatedCampaigns = campaigns.filter((c) => c.id !== campaign.id);
-    saveCampaigns(updatedCampaigns);
-    setSelectedCampaign(null);
-    setIsEditing(false);
+  const handleDeleteCampaign = (id) => {
+    setCampaigns(campaigns.filter(c => c.id !== id));
+    if (selectedCampaign?.id === id) {
+      setSelectedCampaign(null);
+    }
+  };
+
+  const handleSelectCampaign = (campaign) => {
+    setSelectedCampaign(campaign);
+    setFormData({
+      title: campaign.title,
+      description: campaign.description || '',
+      setting: campaign.setting || ''
+    });
+    setIsEditing(true);
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6">Campaign & World Building</h2>
+      <h1 className="text-3xl font-bold mb-6">Campaign Management</h1>
       
-      {!isEditing && (
-        <Button
-          color="primary"
-          onClick={() => {
-            setSelectedCampaign(null);
-            setIsEditing(true);
-          }}
-        >
-          Add Campaign
-        </Button>
-      )}
-
-      <Spacer y={4} />
-
+      {/* Export/Import Tools */}
+      <CampaignExportImport campaignData={campaignData} />
+      
       <div className="flex gap-6">
         <div className="w-2/3">
           <CampaignList
             campaigns={campaigns}
-            onSelect={(id) => {
-              const campaign = campaigns.find((c) => c.id === id);
-              setSelectedCampaign(campaign);
-              setIsEditing(!!campaign);
-            }}
-            onEdit={handleEditCampaign}
+            onSelect={handleSelectCampaign}
             onDelete={handleDeleteCampaign}
           />
         </div>
-
-        {isEditing && (
-          <div className="w-1/3">
+        
+        <div className="w-1/3">
+          {isEditing ? (
             <CampaignForm
               initialData={selectedCampaign}
               onSave={selectedCampaign ? handleUpdateCampaign : handleAddCampaign}
-              onCancel={() => setIsEditing(false)}
+              onCancel={() => {
+                setIsEditing(false);
+                setFormData({ title: '', description: '', setting: '' });
+              }}
             />
-          </div>
-        )}
+          ) : (
+            <div className="bg-gray-100 p-6 rounded-lg">
+              <h2 className="text-xl font-semibold mb-3">Select or Create Campaign</h2>
+              <p className="text-gray-600 text-sm">
+                Choose a campaign from the list to view details, or create a new one to get started.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
