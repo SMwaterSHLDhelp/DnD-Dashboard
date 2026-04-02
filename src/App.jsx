@@ -1,54 +1,56 @@
-import React, { useState } from 'react';
-import { Navbar, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarBrand, NavbarItem, Button, Link } from '@heroui/react';
-import { Menu, Book, Calendar, User, Sword, Gift, BookOpen, FileText, Shuffle, Info } from 'lucide-react';
-import Campaign from './pages/Campaign';
-import Session from './pages/Session';
-import NPC from './pages/NPC';
-import Character from './pages/Character';
-import Combat from './pages/Combat';
-import Loot from './pages/Loot';
-import RulesReference from './pages/RulesReference';
-import DMNotes from './pages/DMNotes';
-import Timeline from './pages/Timeline';
-import RandomGenerators from './pages/RandomGenerators';
+import React, { useState, useEffect } from 'react';
+import QuickReferenceModal from './components/QuickReferenceModal';
+import Sidebar from './components/Sidebar';
+import Campaign from './components/Campaign';
+import Session from './components/Session';
+import NPC from './components/NPC';
+import Player from './components/Player';
+import Combat from './components/Combat';
+import Loot from './components/Loot';
+import RulesReference from './components/RulesReference';
+import DMNotes from './components/DMNotes';
+import HistoryLog from './components/HistoryLog';
+import RandomGenerators from './components/RandomGenerators';
+import { Navbar, NavbarContent, NavbarItem, Button } from '@heroui/react';
+import './App.css';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('campaign');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  const menuItems = [
-    { id: 'campaign', label: 'Campaign', icon: Book },
-    { id: 'session', label: 'Sessions', icon: Calendar },
-    { id: 'npc', label: 'NPCs', icon: User },
-    { id: 'character', label: 'Characters', icon: User },
-    { id: 'combat', label: 'Combat', icon: Sword },
-    { id: 'loot', label: 'Loot', icon: Gift },
-    { id: 'rules', label: 'Rules', icon: BookOpen },
-    { id: 'notes', label: 'Notes', icon: FileText },
-    { id: 'timeline', label: 'Timeline', icon: Shuffle },
-    { id: 'generators', label: 'Generators', icon: Info }
-  ];
+  const [activeView, setActiveView] = useState('campaign');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const renderContent = () => {
-    switch (activeTab) {
+  // Handle global Ctrl+K shortcut for quick reference modal
+  useEffect(() => {
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+
+    document.addEventListener('open-quick-reference', handleOpenModal);
+    
+    return () => {
+      document.removeEventListener('open-quick-reference', handleOpenModal);
+    };
+  }, []);
+
+  const renderView = () => {
+    switch (activeView) {
       case 'campaign':
         return <Campaign />;
       case 'session':
         return <Session />;
       case 'npc':
         return <NPC />;
-      case 'character':
-        return <Character />;
+      case 'player':
+        return <Player />;
       case 'combat':
         return <Combat />;
       case 'loot':
         return <Loot />;
       case 'rules':
         return <RulesReference />;
-      case 'notes':
+      case 'dmnotes':
         return <DMNotes />;
-      case 'timeline':
-        return <Timeline />;
+      case 'history':
+        return <HistoryLog />;
       case 'generators':
         return <RandomGenerators />;
       default:
@@ -57,48 +59,75 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar onMenuOpenChange={setIsMenuOpen} isBordered>
-        <NavbarContent>
-          <NavbarBrand>
-            <div className="flex items-center gap-2">
-              <Menu size={24} />
-              <span className="font-bold text-inherit">D&D DM Tool</span>
-            </div>
-          </NavbarBrand>
-        </NavbarContent>
+    <div className="app-container">
+      {/* Quick Reference Modal */}
+      <QuickReferenceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
-        <NavbarContent justify="end">
-          <NavbarItem>
-            <Link isExternal href="https://github.com/yourusername/dnd-dm-tool" color="primary">
-              GitHub
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
+      {/* Floating Action Button for Quick Reference */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="floating-action-btn"
+        title="Quick Reference (Ctrl+K)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
 
-        <NavbarMenu>
-          {menuItems.map((item) => (
-            <NavbarMenuItem key={item.id}>
-              <Button 
-                variant={activeTab === item.id ? "solid" : "ghost"}
-                color={activeTab === item.id ? "primary" : "default"}
-                startContent={<item.icon size={16} />} 
-                fullWidth
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setIsMenuOpen(false);
-                }}
-              >
-                {item.label}
-              </Button>
-            </NavbarMenuItem>
-          ))}
-        </NavbarMenu>
-      </Navbar>
-
-      <main className="flex-1">
-        {renderContent()}
-      </main>
+      <div className="app-layout">
+        <Sidebar activeView={activeView} setActiveView={setActiveView} />
+        <div className="main-content">
+          <Navbar className="app-header">
+            <NavbarContent className="flex-1">
+              <NavbarItem>
+                <h1 className="text-xl font-bold">D&D Campaign Manager</h1>
+              </NavbarItem>
+            </NavbarContent>
+            <NavbarContent>
+              <NavbarItem>
+                <Button
+                  isIconOnly
+                  size="sm"
+                  onClick={() => setIsModalOpen(true)}
+                  title="Quick Reference (Ctrl+K)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </Button>
+              </NavbarItem>
+            </NavbarContent>
+          </Navbar>
+          <main className="content-area p-4">
+            {renderView()}
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
