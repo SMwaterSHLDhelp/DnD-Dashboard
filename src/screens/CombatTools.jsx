@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
-import { Card, CardBody, CardHeader, Input, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardBody, Button, Input } from '@heroui/react';
+import CombatManager from '../components/CombatManager';
+import CombatConditions from '../components/CombatConditions';
 
-function CombatTools() {
-  const [initiativeList, setInitiativeList] = useState([
-    { id: 1, name: 'Goblin A', initiative: 12, hp: 7, maxHp: 7 },
-    { id: 2, name: 'Player 1', initiative: 15, hp: 28, maxHp: 28 },
-    { id: 3, name: 'Goblin B', initiative: 10, hp: 7, maxHp: 7 }
-  ]);
-  const [activeTurn, setActiveTurn] = useState(1);
-  const [conditionInput, setConditionInput] = useState('');
-  const [conditions, setConditions] = useState([]);
+const CombatTools = () => {
+  const [characters, setCharacters] = useState([]);
+  const [npcs, setNpcs] = useState([]);
+  const [monsters, setMonsters] = useState([]);
+  const [initiativeList, setInitiativeList] = useState([]);
+  const [activeTurn, setActiveTurn] = useState(0);
+  const [tempCombatant, setTempCombatant] = useState({
+    name: '', initiative: 0, hp: 0, maxHp: 0
+  });
+
+  // Load/save data from localStorage
+  useEffect(() => {
+    const savedCharacters = localStorage.getItem('dnd_characters');
+    const savedNpcs = localStorage.getItem('dnd_npcs');
+    const savedMonsters = localStorage.getItem('dnd_monsters');
+    if (savedCharacters) setCharacters(JSON.parse(savedCharacters));
+    if (savedNpcs) setNpcs(JSON.parse(savedNpcs));
+    if (savedMonsters) setMonsters(JSON.parse(savedMonsters));
+  }, []);
 
   const addInitiative = () => {
     const newEntry = {
       id: Date.now(),
-      name: `Creature ${initiativeList.length + 1}`,
-      initiative: Math.floor(Math.random() * 20) + 1,
-      hp: 10,
-      maxHp: 10
+      name: tempCombatant.name || 'Unknown',
+      initiative: tempCombatant.initiative || Math.floor(Math.random() * 20) + 1,
+      hp: tempCombatant.hp,
+      maxHp: tempCombatant.maxHp || tempCombatant.hp,
+      type: tempCombatant.type || 'character'
     };
     setInitiativeList([...initiativeList, newEntry].sort((a, b) => b.initiative - a.initiative));
+    setTempCombatant({ name: '', initiative: 0, hp: 0, maxHp: 0 });
   };
 
   const removeInitiative = (id) => {
@@ -37,25 +50,40 @@ function CombatTools() {
     setActiveTurn((prev) => (prev + 1) % initiativeList.length);
   };
 
-  const addCondition = (characterId) => {
-    if (conditionInput.trim()) {
-      setConditions([...conditions, { id: Date.now(), characterId, condition: conditionInput }]);
-      setConditionInput('');
-    }
-  };
-
-  const removeCondition = (id) => {
-    setConditions(conditions.filter(c => c.id !== id));
+  const previousTurn = () => {
+    setActiveTurn((prev) => (prev - 1 + initiativeList.length) % initiativeList.length);
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold">Combat & Encounter Tools</h2>
-      
+    <div className="space-y-6">
+      {/* Initiative Tracker */}
       <Card>
         <CardHeader>
           <h3 className="text-xl font-semibold">Initiative Tracker</h3>
-          <Button size="sm" onClick={addInitiative} color="primary">+ Add Entry</Button>
+          <div className="flex space-x-2">
+            <Input
+              type="text"
+              placeholder="Name"
+              size="sm"
+              value={tempCombatant.name}
+              onChange={(e) => setTempCombatant({ ...tempCombatant, name: e.target.value })}
+            />
+            <Input
+              type="number"
+              placeholder="Initiative"
+              size="sm"
+              value={tempCombatant.initiative || ''}
+              onChange={(e) => setTempCombatant({ ...tempCombatant, initiative: parseInt(e.target.value) || 0 })}
+            />
+            <Input
+              type="number"
+              placeholder="HP"
+              size="sm"
+              value={tempCombatant.hp || ''}
+              onChange={(e) => setTempCombatant({ ...tempCombatant, hp: parseInt(e.target.value) || 0 })}
+            />
+            <Button size="sm" onClick={addInitiative} color="primary">+ Add</Button>
+          </div>
         </CardHeader>
         <CardBody>
           <div className="space-y-2">
@@ -67,9 +95,10 @@ function CombatTools() {
                 }`}
               >
                 <div className="flex items-center space-x-4">
-                  <span className="font-mono text-sm text-gray-500 w-8">{entry.initiative}</span>
+                  <span className="font-mono text-sm text-gray-500 w-8">{index + 1}</span>
                   <span className={`font-medium ${index === activeTurn ? 'text-indigo-700 font-bold' : 'text-gray-700'}`}>
                     {entry.name}
+                    {entry.initiative > 0 && <span className="ml-2 text-sm text-gray-500">(Init: {entry.initiative})</span>}
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -91,52 +120,42 @@ function CombatTools() {
               </div>
             ))}
             {initiativeList.length === 0 && (
-              <p className="text-gray-500 text-center py-4">No combatants added yet. Click "+ Add Entry" to start.</p>
+              <p className="text-gray-500 text-center py-4">No combatants added yet. Use the form above to add entries.</p>
             )}
           </div>
-          <div className="mt-4 flex justify-end space-x-2">
-            <Button onClick={() => setInitiativeList([]).sort(() => 0)} variant="flat">
-              Reset
+          <div className="mt-4 flex justify-center space-x-2">
+            <Button onClick={previousTurn} disabled={activeTurn === 0} variant="flat">
+              ◀ Previous
             </Button>
             <Button onClick={nextTurn} color="primary">
-              Next Turn
+              Next ▶
             </Button>
           </div>
         </CardBody>
       </Card>
 
+      {/* Combat Manager with Turn Timer */}
       <Card>
         <CardHeader>
-          <h3 className="text-xl font-semibold">Conditions & Effects</h3>
+          <h3 className="text-xl font-semibold">Advanced Combat Manager</h3>
+          <Button size="sm" onClick={() => setInitiativeList([])} variant="flat">Reset All</Button>
         </CardHeader>
         <CardBody>
-          <div className="flex space-x-2 mb-4">
-            <Input
-              placeholder="Add condition (e.g., Poisoned, Blinded)"
-              value={conditionInput}
-              onChange={(e) => setConditionInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addCondition(activeTurn);
-              }}
-            />
-            <Button onClick={() => addCondition(activeTurn)} color="primary">
-              Add
-            </Button>
-          </div>
-          <div className="space-y-2">
-            {conditions.map(condition => (
-              <div key={condition.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                <span className="text-sm font-medium">{condition.condition}</span>
-                <Button size="sm" onClick={() => removeCondition(condition.id)} variant="flat" color="danger">
-                  ✕
-                </Button>
-              </div>
-            ))}
-          </div>
+          <CombatManager characters={characters} npcs={npcs} monsters={monsters} />
+        </CardBody>
+      </Card>
+
+      {/* Combat Conditions */}
+      <Card>
+        <CardHeader>
+          <h3 className="text-xl font-semibold">Combat Conditions</h3>
+        </CardHeader>
+        <CardBody>
+          <CombatConditions />
         </CardBody>
       </Card>
     </div>
   );
-}
+};
 
 export default CombatTools;
