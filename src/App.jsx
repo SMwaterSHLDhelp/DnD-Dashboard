@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Navbar, 
-  Button, 
-  Link, 
-  Modal, 
-  ModalContent, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter, 
+  Navbar,
+  Button,
+  Link,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   useDisclosure,
   Input,
   Chip
@@ -32,6 +32,7 @@ import RulesReference from './components/RulesReference';
 import NotesSecrets from './components/NotesSecrets';
 import CampaignWorld from './components/CampaignWorld';
 import RandomGenerator from './components/RandomGenerator';
+import DiceRoller from './components/DiceRoller';
 
 // Main App Component
 export default function App() {
@@ -82,6 +83,7 @@ export default function App() {
       } catch (e) {
         console.error('Error loading saved data:', e);
       }
+
     };
     
     loadData();
@@ -202,6 +204,7 @@ export default function App() {
   };
 
   return (
+    <div className="min-h-screen bg-white dark:bg-gray-90:
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Header with Navigation */}
       <Navbar className="bg-blue-600 dark:bg-blue-900">
@@ -279,14 +282,14 @@ export default function App() {
         {selectedModule === 'campaign' && (
           <CampaignWorld 
             data={campaignData} 
-            onUpdate={setCampaignData}
+            onUpdate={setCampaign/CampaignData}
             onAddLore={addLore}
           />
         )}
 
         {/* Session Management */}
         {selectedModule === 'sessions' && (
-          <div>
+          <div className="flex flex-col gap-6">
             <SessionList 
               sessions={sessions} 
               onView={(id) => console.log('View session', id)}
@@ -300,9 +303,9 @@ export default function App() {
           </div>
         )}
 
-        {/* NPC Management */}
+        {/* NPC Management */
         {selectedModule === 'npcs' && (
-          <div>
+          <div className="flex flex-col gap-6">
             <NPCList 
               npcs={npcs} 
               onAdd={addNpc}
@@ -319,9 +322,9 @@ export default function App() {
           </div>
         )}
 
-        {/* Character & Player Tracking */}
+        {/* Character & Player Tracking */
         {selectedModule === 'characters' && (
-          <div>
+          <div className="flex flex-col gap-6">
             <CharacterList 
               characters={characters} 
               onUpdate={(updatedChar) => {
@@ -394,7 +397,9 @@ export default function App() {
         )}
       </div>
 
-      {/* Footer */}
+      <DiceRoller />
+
+      {/* Footer */
       <footer className="bg-gray-100 dark:bg-gray-800 p-4 text-center text-sm">
         <p>D&D Campaign Manager - Built for Dungeon Masters</p>
       </footer>
