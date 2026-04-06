@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   return (
     <aside 
-      className={`fixed inset-y-0 left-0 z-50 w-64 bg-content1 border-r border-divider transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${ 
+      className={`fixed inset-y-0 left-0 z-50 w-72 bg-content1 border-r border-divider transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${ 
         isOpen ? 'translate-x-0' : '-translate-x-full' 
       }`}
     >
@@ -35,21 +35,21 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             isIconOnly 
             variant="light" 
             size="sm" 
-            className="lg:hidden" 
+            className="lg:hidden active:scale-90 transition-transform" 
             onClick={onClose}
           >
-            <X size={20} />
+            <X size={24} />
           </Button>
         </div>
 
-        <nav className="flex-1 px-4 py-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-2 overflow-y-auto scrollbar-thin">
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.to}>
                 <Link 
                   to={item.to} 
                   onClick={onClose}
-                  className="flex items-center px-4 py-3 rounded-lg hover:bg-default-100 transition-colors text-default-600 hover:text-primary font-medium"
+                  className="flex items-center px-4 py-3.5 rounded-xl hover:bg-default-100 transition-all text-default-600 hover:text-primary font-medium active:bg-default-200"
                 >
                   {item.label}
                 </Link>
