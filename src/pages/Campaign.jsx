@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CampaignList from '../components/CampaignList';
 import CampaignForm from '../components/CampaignForm';
 import CampaignExportImport from '../components/CampaignExportImport';
+import CampaignCloudBackup from '../components/CampaignCloudBackup';
 
 function Campaign() {
   const [campaigns, setCampaigns] = useState([]);
@@ -78,39 +79,42 @@ function Campaign() {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Campaign Management</h1>
-      
+
+      {/* Cloud Backup Section */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <Cloud size={20} className="text-primary" />
+          Cloud Backup & Restore
+        </h2>
+        <CampaignCloudBackup campaignData={campaignData} />
+      </div>
+
       {/* Export/Import Tools */}
       <CampaignExportImport campaignData={campaignData} />
-      
-      <div className="flex gap-6">
-        <div className="w-2/3">
-          <CampaignList
-            campaigns={campaigns}
-            onSelect={handleSelectCampaign}
-            onDelete={handleDeleteCampaign}
-          />
-        </div>
-        
-        <div className="w-1/3">
-          {isEditing ? (
-            <CampaignForm
-              initialData={selectedCampaign}
-              onSave={selectedCampaign ? handleUpdateCampaign : handleAddCampaign}
-              onCancel={() => {
-                setIsEditing(false);
-                setFormData({ title: '', description: '', setting: '' });
-              }}
-            />
-          ) : (
-            <div className="bg-gray-100 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-3">Select or Create Campaign</h2>
-              <p className="text-gray-600 text-sm">
-                Choose a campaign from the list to view details, or create a new one to get started.
-              </p>
-            </div>
-          )}
-        </div>
+
+      {/* Campaign Form */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">
+          {isEditing ? 'Edit Campaign' : 'Create New Campaign'}
+        </h2>
+        <CampaignForm
+          formData={formData}
+          isEditing={isEditing}
+          onCancel={() => {
+            setIsEditing(false);
+            setFormData({ title: '', description: '', setting: '' });
+          }}
+          onSave={isEditing ? handleUpdateCampaign : handleAddCampaign}
+        />
       </div>
+
+      {/* Campaign List */}
+      <CampaignList
+        campaigns={campaigns}
+        selectedCampaign={selectedCampaign}
+        onSelectCampaign={handleSelectCampaign}
+        onDeleteCampaign={handleDeleteCampaign}
+      />
     </div>
   );
 }
