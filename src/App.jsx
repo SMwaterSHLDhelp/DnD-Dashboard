@@ -10,6 +10,7 @@ import RulesSection from './components/RulesSection';
 import NotesSection from './components/NotesSection';
 import HistorySection from './components/HistorySection';
 import GeneratorsSection from './components/GeneratorsSection';
+import OnboardingTutorial from './components/OnboardingTutorial';
 
 function App() {
   const [activeModule, setActiveModule] = useState('campaign');
@@ -81,6 +82,7 @@ function App() {
       <main className="flex-1 overflow-auto p-6">
         {renderModule()}
       </main>
+      <OnboardingTutorial />
     </div>
   );
 }
