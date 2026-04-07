@@ -1,15 +1,49 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Button } from '@heroui/react';
-import { Sword, Map, Users, Scroll, Ghost, Compass, Database, History, Dice5, BookOpen } from 'lucide-react';
-import { TemplateCard } from './TemplateCard';
+import { Card, CardHeader, CardBody, Button, Divider } from '@heroui/react';
+import { Sword, Map, Users, Scroll, Ghost, BookOpen, Database, History, Dice5, Compass } from 'lucide-react';
 
 interface Template {
   id: string;
   title: string;
   description: string;
-  icon: any;
-  category: 'combat' | 'exploration' | 'narrative' | 'utility';
+  icon: React.ElementType;
+  category: string;
 }
+
+interface TemplateCardProps {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  onSelect: () => void;
+}
+
+const TemplateCard: React.FC<TemplateCardProps> = ({ title, description, icon: Icon, onSelect }) => {
+  return (
+    <Card className="h-full border-none bg-default-100 shadow-sm">
+      <CardHeader className="flex gap-3">
+        <div className="p-2 bg-primary/10 rounded-lg">
+          <Icon className="text-primary" size={24} />
+        </div>
+        <div className="flex flex-col">
+          <p className="text-md font-bold">{title}</p>
+        </div>
+      </CardHeader>
+      <Divider className="opacity-50" />
+      <CardBody className="py-4">
+        <p className="text-small text-default-50/60 mb-4">{description}</p>
+        <Button 
+          size="sm" 
+          variant="flat" 
+          color="primary" 
+          className="w-full" 
+          onPress={onSelect}
+        >
+          Use Template
+        </Button>
+      </CardBody>
+    </Card>
+  );
+};
 
 const templates: Template[] = [
   { id: 'combat-enc', title: 'Combat Encounter', description: 'Standard combat setup with initiative and monsters.', icon: Sword, category: 'combat' },
@@ -24,9 +58,9 @@ const templates: Template[] = [
   { id: 'travel-log', title: 'Traveler Guide', description: 'Tracking distance, weather, and encounters.', icon: Compass, category: 'exploration' },
 ];
 
-export const TemplateLibrary: React.FC = () => {
+export const TemplateLibrary: React.FC<{ onTemplateSelect: (id: string) => void }> = ({ onTemplateSelect }) => {
   const handleSelect = (id: string) => {
-    console.log('Selected template:', id);
+    onTemplateSelect(id);
   };
 
   return (
