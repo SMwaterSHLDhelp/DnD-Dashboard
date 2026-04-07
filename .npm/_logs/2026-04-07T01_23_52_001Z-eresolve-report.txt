@@ -1,0 +1,16 @@
+'Log files:
+/home/swsh/.pilot_ai/projects/6513ea30-de6a-4f75-bb32-4d8984e15bac/repo/.npm/_logs/2026-04-07T01_23_52_001Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: dnd-app@1.0.0
+Found: react@18.3.1
+node_modules/react
+  react@"^18.2.0" from the root project
+
+Could not resolve dependency:
+peer react@">=19.0.0" from @heroui/react@3.0.2
+node_modules/@heroui/react
+  @heroui/react@"^3.0.0" from the root project
+
+Fix the upstream dependency conflict, or retry this command with --force or --legacy-peer-deps to accept an incorrect (and potentially broken) dependency resolution.

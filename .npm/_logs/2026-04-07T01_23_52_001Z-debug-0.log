@@ -1,0 +1,65 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@11.12.1
+2 info using node@v25.9.0
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/swsh/.pilot_ai/projects/***/repo/.npmrc
+5 silly config load:file:/etc/npmrc
+6 verbose title npm install
+7 verbose argv "install"
+8 verbose logfile logs-max:10 dir:/home/swsh/.pilot_ai/projects/***/repo/.npm/_logs/2026-04-07T01_23_52_001Z-
+9 verbose logfile /home/swsh/.pilot_ai/projects/***/repo/.npm/_logs/2026-04-07T01_23_52_001Z-debug-0.log
+10 silly logfile start cleaning logs, removing 1 files
+11 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+12 silly logfile done cleaning log files
+13 silly idealTree buildDeps
+14 silly fetch manifest @heroui/react@^3.0.0
+15 silly packumentCache full:https://registry.npmjs.org/@heroui%2freact cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/@heroui%2freact 228ms (cache updated)
+17 silly packumentCache full:https://registry.npmjs.org/@heroui%2freact set size:undefined disposed:false
+18 silly fetch manifest react@^18.2.0
+19 silly packumentCache full:https://registry.npmjs.org/react cache-miss
+20 http fetch GET 200 https://registry.npmjs.org/react 182ms (cache updated)
+21 silly packumentCache full:https://registry.npmjs.org/react set size:undefined disposed:false
+22 silly fetch manifest react@>=19.0.0
+23 silly packumentCache full:https://registry.npmjs.org/react cache-miss
+24 http cache https://registry.npmjs.org/react 9ms (cache hit)
+25 silly packumentCache full:https://registry.npmjs.org/react set size:6585005 disposed:false
+26 verbose stack Error: unable to resolve dependency tree
+26 verbose stack     at #failPeerConflict (/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1415:25)
+26 verbose stack     at #loadPeerSet (/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1381:33)
+26 verbose stack     at async #buildDepStep (/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:917:11)
+26 verbose stack     at async Arborist.buildIdealTree (/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:170:7)
+26 verbose stack     at async Promise.all (index 1)
+26 verbose stack     at async Arborist.reify (/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:111:5)
+26 verbose stack     at async Install.exec (/usr/lib/node_modules/npm/lib/commands/install.js:146:5)
+26 verbose stack     at async Npm.exec (/usr/lib/node_modules/npm/lib/npm.js:193:9)
+26 verbose stack     at async module.exports (/usr/lib/node_modules/npm/lib/cli/entry.js:67:5)
+27 error code ERESOLVE
+28 error ERESOLVE unable to resolve dependency tree
+29 error
+30 error While resolving: dnd-app@1.0.0
+30 error Found: react@18.3.1[2m[22m
+30 error [2mnode_modules/react[22m
+30 error   react@"^18.2.0" from the root project
+30 error
+30 error Could not resolve dependency:
+30 error [95mpeer[39m react@">=19.0.0" from @heroui/react@3.0.2[2m[22m
+30 error [2mnode_modules/@heroui/react[22m
+30 error   @heroui/react@"^3.0.0" from the root project
+30 error
+30 error Fix the upstream dependency conflict, or retry this command with --force or --legacy-peer-deps to accept an incorrect (and potentially broken) dependency resolution.
+31 error
+31 error
+31 error For a full report see:
+31 error /home/swsh/.pilot_ai/projects/***/repo/.npm/_logs/2026-04-07T01_23_52_001Z-eresolve-report.txt
+32 silly unfinished npm timer reify 1775525032057
+33 silly unfinished npm timer reify:loadTrees 1775525032058
+34 silly unfinished npm timer idealTree:buildDeps 1775525032063
+35 silly unfinished npm timer idealTree:#root 1775525032063
+36 verbose cwd /home/swsh/.pilot_ai/projects/***/repo
+37 verbose os Linux 6.19.10-1-cachyos-bore
+38 verbose node v25.9.0
+39 verbose npm  v11.12.1
+40 verbose exit 1
+41 verbose code 1
+42 error A complete log of this run can be found in: /home/swsh/.pilot_ai/projects/***/repo/.npm/_logs/2026-04-07T01_23_52_001Z-debug-0.log
